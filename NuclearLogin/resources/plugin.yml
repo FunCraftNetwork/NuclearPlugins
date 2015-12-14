@@ -1,0 +1,11 @@
+#name, main, version and api are required
+name: NuclearLogin
+main: NuclearLoginPlugin
+#remember version and api is string, don't write it like this: 1.0.0, or there will be an exception
+version: "2 build 4"
+api: ["1.0.0"]
+
+load: STARTUP
+author: Snake1999
+description: Nuclear login plugin
+website: https://i-have-no-website-yet.oops
