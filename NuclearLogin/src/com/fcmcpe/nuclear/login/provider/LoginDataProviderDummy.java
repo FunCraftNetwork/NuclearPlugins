@@ -4,11 +4,6 @@ import com.fcmcpe.nuclear.login.data.LoginData;
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
 import com.fcmcpe.nuclear.login.data.PlayerLoginResult;
 import com.fcmcpe.nuclear.login.data.PlayerUnregisterResult;
-import com.fcmcpe.nuclear.login.data.LoginData;
-import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
-import com.fcmcpe.nuclear.login.data.PlayerUnregisterResult;
-import com.fcmcpe.nuclear.login.data.PlayerLoginResult;
-
 /**
  * Created on 2015/12/9 by xtypr.
  * Package com.fcmcpe.nuclear.login.provider in project NuclearLogin .

@@ -2,8 +2,6 @@ package com.fcmcpe.nuclear.login.security;
 
 import com.fcmcpe.nuclear.login.security.hash.sha512.SHA512;
 import com.fcmcpe.nuclear.login.security.hash.whirlpool.Whirlpool;
-import com.fcmcpe.nuclear.login.security.hash.sha512.SHA512;
-import com.fcmcpe.nuclear.login.security.hash.whirlpool.Whirlpool;
 
 import java.util.Objects;
 

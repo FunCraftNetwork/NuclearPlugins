@@ -2,7 +2,6 @@ package com.fcmcpe.nuclear.login.provider;
 
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
 import com.fcmcpe.nuclear.login.data.LoginData;
-import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
 import com.fcmcpe.nuclear.login.data.PlayerLoginResult;
 import com.fcmcpe.nuclear.login.data.PlayerUnregisterResult;
 

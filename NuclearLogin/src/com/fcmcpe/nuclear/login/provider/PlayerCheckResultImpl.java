@@ -1,8 +1,6 @@
 package com.fcmcpe.nuclear.login.provider;
 
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
-import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
-
 /**
  * Created on 2015/12/12 by xtypr.
  * Package com.fcmcpe.nuclear.login.provider in project NuclearLogin .
