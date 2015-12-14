@@ -6,6 +6,6 @@ version: "2 build 4"
 api: ["1.0.0"]
 
 load: STARTUP
-author: Snake1999
-description: Nuclear login plugin
+authors: ["Snake1999", "Pub4Game"]
+description: "Nuclear login plugin"
 website: https://i-have-no-website-yet.oops
