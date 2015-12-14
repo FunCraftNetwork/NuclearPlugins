@@ -29,7 +29,7 @@ public class INILanguageLoader {
     }
 
     static GetLanguageResult getLanguage(Locale locale){
-        String dirPath = "com.fcmcpe.nuclear.login/language/";
+        String dirPath = "com/fcmcpe/nuclear/login/language/";
 
         InputStream langStream = NuclearLoginPlugin.getInstance().getResource(dirPath + locale.getLanguage()+"_"+locale.getCountry()+".ini");
 
