@@ -1,36 +1,42 @@
-package com.fcmcpe.nuclear.login.language;
+package com.fcmcpe.nuclear.core.language;
 
 import cn.nukkit.Server;
+import cn.nukkit.plugin.Plugin;
 import cn.nukkit.utils.TextFormat;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
- * Created on 2015/12/9 by xtypr.
- * Package com.fcmcpe.nuclear.login.language in project NuclearLogin .
+ * Created on 2015/12/15 by xtypr.
+ * Package com.fcmcpe.nuclear.core.language in project NuclearPlugins .
  */
-public final class Dictionary {
+public final class NuclearDictionary {
 
     private static Map<Locale, Map<String, String>> entries = new HashMap<>();
     private static Map<Locale, Integer> trials = new HashMap<>();
+    private static Map<Plugin, INILanguageLoader> loaders = new HashMap<>();
+
+    public static void registerPath(Plugin plugin, String path) {
+        loaders.remove(plugin);
+        loaders.putIfAbsent(plugin, new INILanguageLoader(plugin, path));
+    }
 
     private static void checkLocale(Locale locale){
         if(!entries.containsKey(locale) && !entries.containsKey(new Locale(locale.getLanguage())) ){
             if (trials.getOrDefault(locale, 0) <= 5) {
-                INILanguageLoader.GetLanguageResult result;
-                Server.getInstance().getLogger().notice("Loading dictionary: " + locale.getDisplayName());
-                trials.putIfAbsent(locale, 0);
-                int trial = trials.getOrDefault(locale, 0);
-                result = INILanguageLoader.getLanguage(locale);
-                if (result != null) {
-                    entries.put(result.getLocale(), result.getResult());
-                    Server.getInstance().getLogger().notice(TextFormat.GREEN + "Loaded dictionary: " + locale.getDisplayName());
-                }
-                trial++;
-                trials.replace(locale, trial);
+                loaders.forEach((p, l) -> {
+                    INILanguageLoader.GetLanguageResult result;
+                    Server.getInstance().getLogger().info("Loading dictionary: " + locale.getDisplayName());
+                    trials.putIfAbsent(locale, 0);
+                    int trial = trials.getOrDefault(locale, 0);
+                    result = l.getLanguage(locale);
+                    if (result != null) {
+                        entries.put(result.getLocale(), result.getResult());
+                        Server.getInstance().getLogger().notice("Loaded dictionary: " + locale.getDisplayName());
+                    }
+                    trial++;
+                    trials.replace(locale, trial);
+                });
             }
         }
     }
@@ -107,4 +113,5 @@ public final class Dictionary {
 
         return get(locale, msg, paramsMap);
     }
+
 }

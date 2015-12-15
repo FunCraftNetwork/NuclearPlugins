@@ -1,4 +1,4 @@
-package com.fcmcpe.nuclear.login.util.ipgeo;
+package com.fcmcpe.nuclear.core.ipgeo;
 
 import com.google.gson.Gson;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * Created on 2015/12/10 by xtypr.
- * Package com.fcmcpe.nuclear.login.util.ipgeo in project NuclearLogin .
+ * Package com.fcmcpe.nuclear.core.ipgeo in project NuclearLogin .
  */
 public class BaiduIPGEO implements IPGEOEngine {
     Gson gson = new Gson();
@@ -68,9 +68,9 @@ public class BaiduIPGEO implements IPGEOEngine {
     }
 
     class LocaleGetResult{
-        int errNum;
+        //int errNum;
 
-        String errMsg;
+        //String errMsg;
 
         Map<String, String> retData;
     }

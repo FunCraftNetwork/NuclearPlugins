@@ -2,19 +2,18 @@ package com.fcmcpe.nuclear.login;
 
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Utils;
+import com.fcmcpe.nuclear.core.NuclearCore;
+import com.fcmcpe.nuclear.core.language.NuclearDictionary;
 import com.fcmcpe.nuclear.login.command.LoginCommand;
 import com.fcmcpe.nuclear.login.command.LogoutCommand;
-import com.fcmcpe.nuclear.login.language.Dictionary;
 import com.fcmcpe.nuclear.login.provider.LoginDataProviderMySQL;
 import com.fcmcpe.nuclear.login.provider.ProviderException;
 import com.fcmcpe.nuclear.login.task.SendLoginMsgTask;
-import com.fcmcpe.nuclear.login.util.ipgeo.BaiduIPGEO;
-import com.fcmcpe.nuclear.login.util.ipgeo.DummyIPGEO;
-import com.fcmcpe.nuclear.login.util.ipgeo.IPGEOEngine;
+import com.fcmcpe.nuclear.core.ipgeo.BaiduIPGEO;
+import com.fcmcpe.nuclear.core.ipgeo.DummyIPGEO;
 import com.fcmcpe.nuclear.login.command.RegisterCommand;
 import com.fcmcpe.nuclear.login.command.UnregisterCommand;
 import com.fcmcpe.nuclear.login.listener.NuclearLoginListener;
-import java.util.Locale;
 
 /**
  * Created on 2015/12/9 by xtypr.
@@ -27,8 +26,6 @@ public final class NuclearLoginPlugin extends PluginBase {
         return instance;
     }
 
-    IPGEOEngine ipgeoEngine;
-
     @Override
     public void onLoad() {
         saveDefaultConfig();
@@ -39,11 +36,13 @@ public final class NuclearLoginPlugin extends PluginBase {
     @Override
     public void onEnable() {
         try {
+            /* Dictionary init */
+            NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/login/language/");
             /* Fire IP-GEO */
             if (getConfig().getNestedAs("language.auto-detection-of-language", Boolean.TYPE))
-                ipgeoEngine = new BaiduIPGEO();
+                NuclearCore.INSTANCE.setIPGEOEngine(new BaiduIPGEO());
             else
-                ipgeoEngine = new DummyIPGEO();
+                NuclearCore.INSTANCE.setIPGEOEngine(new DummyIPGEO(getConfig().getNestedAs("language.language", String.class)));
             /* Fire Provider */
             String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/login/provider/mysql-init.sql"));
             String sqlLink = "jdbc:mysql://" +
@@ -91,17 +90,9 @@ public final class NuclearLoginPlugin extends PluginBase {
 
     private void selfCheck(){
         try {
-            getLogger().info("Self check started.");
-            getLogger().info("Checking IP-GEO: "+ ipgeoEngine.getLocaleFromIP("62.5.210.0").toString());
             getLogger().info("Checking provider: "+ NuclearLogin.INSTANCE.getDataProvider().selfCheck());
-            getLogger().info("Checking dictionary: "+ Dictionary.get(Locale.ENGLISH, "nuclearlogin.language.using"));
-            getLogger().info("Self check finished.");
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public IPGEOEngine getIPGEOEngine() {
-        return ipgeoEngine;
     }
 }

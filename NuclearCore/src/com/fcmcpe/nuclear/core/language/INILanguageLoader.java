@@ -1,6 +1,11 @@
-package com.fcmcpe.nuclear.login.language;
+package com.fcmcpe.nuclear.core.language;
 
-import com.fcmcpe.nuclear.login.NuclearLoginPlugin;
+/**
+ * Created on 2015/12/15 by xtypr.
+ * Package com.fcmcpe.nuclear.core.language in project NuclearPlugins .
+ */
+
+import cn.nukkit.plugin.Plugin;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -28,17 +33,25 @@ public class INILanguageLoader {
         }
     }
 
-    static GetLanguageResult getLanguage(Locale locale){
-        String dirPath = "com/fcmcpe/nuclear/login/language/";
+    private Plugin plugin;
+    private String dirPath;
 
-        InputStream langStream = NuclearLoginPlugin.getInstance().getResource(dirPath + locale.getLanguage()+"_"+locale.getCountry()+".ini");
+    public INILanguageLoader(Plugin plugin, String path) {
+        this.plugin = plugin;
+        this.dirPath = path;
+    }
+
+    GetLanguageResult getLanguage(Locale locale){
+        //String dirPath = "com/fcmcpe/nuclear/login/language/";
+
+        InputStream langStream = plugin.getResource(dirPath + locale.getLanguage() + "_" + locale.getCountry() + ".ini");
 
         if(langStream == null){
-            langStream = NuclearLoginPlugin.getInstance().getResource(dirPath + locale.getLanguage()+".ini");
+            langStream = plugin.getResource(dirPath + locale.getLanguage() + ".ini");
             locale = new Locale(locale.getLanguage());
         }
         if(langStream == null){
-            NuclearLoginPlugin.getInstance().getResource(dirPath + "en.ini");
+            plugin.getResource(dirPath + "en.ini");
             locale = Locale.ENGLISH;
         }
         if(langStream == null) return null;

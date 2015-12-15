@@ -2,7 +2,7 @@ package com.fcmcpe.nuclear.login.task;
 
 import cn.nukkit.Server;
 import cn.nukkit.scheduler.AsyncTask;
-import com.fcmcpe.nuclear.login.NuclearLoginPlugin;
+import com.fcmcpe.nuclear.core.NuclearCore;
 import com.fcmcpe.nuclear.login.language.TranslationSender;
 
 import java.util.Locale;
@@ -25,7 +25,7 @@ public class CheckLocaleTask extends AsyncTask {
     @Override
     public void onRun() {
         try {
-            setResult(NuclearLoginPlugin.getInstance().getIPGEOEngine().getLocaleFromIP(address));
+            setResult(NuclearCore.INSTANCE.getIPGEOEngine().getLocaleFromIP(address));
         } catch (Exception e) {
             setResult(e);
         }
