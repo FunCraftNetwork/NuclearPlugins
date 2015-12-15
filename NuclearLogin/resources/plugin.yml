@@ -9,3 +9,5 @@ load: STARTUP
 authors: ["Snake1999", "Pub4Game"]
 description: "Nuclear login plugin"
 website: https://i-have-no-website-yet.oops
+
+depend: ["NuclearCore"]
