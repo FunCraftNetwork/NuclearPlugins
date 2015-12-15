@@ -26,16 +26,16 @@ public final class NuclearLoginPlugin extends PluginBase {
 
     @Override
     public void onLoad() {
+        instance = this;
         saveDefaultConfig();
-        NuclearLoginPlugin.instance = this;
+        /* Dictionary init */
+        NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/login/language/");
         getLogger().info("NuclearLogin by Snake1999.");
     }
 
     @Override
     public void onEnable() {
         try {
-            /* Dictionary init */
-            NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/login/language/");
             /* Fire Provider */
             String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/login/provider/mysql-init.sql"));
             NuclearLogin.INSTANCE.setDataProvider(new LoginDataProviderMySQL(getServer(), sql, NuclearCore.INSTANCE.getMySQLLink()));

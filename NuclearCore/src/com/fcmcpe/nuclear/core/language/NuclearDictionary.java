@@ -1,6 +1,5 @@
 package com.fcmcpe.nuclear.core.language;
 
-import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.utils.TextFormat;
 
@@ -23,21 +22,21 @@ public final class NuclearDictionary {
 
     private static void checkLocale(Locale locale){
         if(!entries.containsKey(locale) && !entries.containsKey(new Locale(locale.getLanguage())) ){
-            if (trials.getOrDefault(locale, 0) <= 5) {
-                loaders.forEach((p, l) -> {
-                    INILanguageLoader.GetLanguageResult result;
-                    Server.getInstance().getLogger().info("Loading dictionary: " + locale.getDisplayName());
-                    trials.putIfAbsent(locale, 0);
-                    int trial = trials.getOrDefault(locale, 0);
-                    result = l.getLanguage(locale);
-                    if (result != null) {
-                        entries.put(result.getLocale(), result.getResult());
-                        Server.getInstance().getLogger().notice("Loaded dictionary: " + locale.getDisplayName());
-                    }
-                    trial++;
-                    trials.replace(locale, trial);
+            if (trials.getOrDefault(locale, 0) <= 5) loaders.forEach((p, l) -> {
+                INILanguageLoader.GetLanguageResult result;
+                trials.putIfAbsent(locale, 0);
+                int trial = trials.getOrDefault(locale, 0);
+                result = l.getLanguage(locale);
+                if (result != null) entries.merge(result.getLocale(), result.getResult(), (f, t)-> {
+                    t.forEach((k, v) -> {
+                        f.replace(k, v);
+                        f.putIfAbsent(k, v);
+                    });
+                    return f;
                 });
-            }
+                trial++;
+                trials.replace(locale, trial);
+            });
         }
     }
 

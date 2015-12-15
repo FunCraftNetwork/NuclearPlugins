@@ -25,6 +25,7 @@ public final class NuclearCorePlugin extends PluginBase {
         instance = this;
         saveDefaultConfig();
         saveResource("mysql.yml");
+        NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/core/language/");
     }
 
     @Override
@@ -36,7 +37,6 @@ public final class NuclearCorePlugin extends PluginBase {
             NuclearCore.INSTANCE.setIPGEOEngine(new DummyIPGEO(getConfig().getNestedAs("language.language", String.class)));
         /* Register listeners and tasks */
         getServer().getPluginManager().registerEvents(new CheckLocaleListener(this), this);
-        NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/core/language/");
         /* Self check */
         selfCheck();
     }
