@@ -1,0 +1,6 @@
+#language
+language:
+  auto-detection-of-language: true
+  #To set the value only if you disabled auto language detection
+  #Available: zh, en, ru
+  language: zh

@@ -14,10 +14,9 @@ import cn.nukkit.event.player.*;
 import com.fcmcpe.nuclear.login.NuclearLogin;
 import com.fcmcpe.nuclear.login.NuclearLoginPlugin;
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
-import com.fcmcpe.nuclear.login.language.TranslationSender;
+import com.fcmcpe.nuclear.core.language.TranslationSender;
 import com.fcmcpe.nuclear.login.provider.LoginDataImpl;
 import com.fcmcpe.nuclear.login.provider.ProviderException;
-import com.fcmcpe.nuclear.login.task.CheckLocaleTask;
 
 import java.util.Objects;
 
@@ -39,7 +38,6 @@ public class NuclearLoginListener implements Listener{
             return;
         }
         Player player = event.getPlayer();
-        plugin.getServer().getScheduler().scheduleAsyncTask(new CheckLocaleTask(player.getName(), player.getAddress()));
         plugin.getServer().getOnlinePlayers().forEach((s, p) -> {
             if (p != null) {
                 if (p != player && Objects.equals(p.getName().toLowerCase().trim(), player.getName().toLowerCase().trim())) {

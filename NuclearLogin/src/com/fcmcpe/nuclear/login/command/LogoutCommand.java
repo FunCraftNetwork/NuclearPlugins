@@ -5,7 +5,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import com.fcmcpe.nuclear.login.NuclearLogin;
 import com.fcmcpe.nuclear.login.NuclearLoginPlugin;
-import com.fcmcpe.nuclear.login.language.TranslationSender;
+import com.fcmcpe.nuclear.core.language.TranslationSender;
 
 /**
  * Created on 2015/12/11 by xtypr.

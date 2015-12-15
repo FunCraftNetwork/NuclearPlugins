@@ -1,7 +1,6 @@
-package com.fcmcpe.nuclear.login.language;
+package com.fcmcpe.nuclear.core.language;
 
 import cn.nukkit.Player;
-import com.fcmcpe.nuclear.core.language.NuclearDictionary;
 
 import java.util.Locale;
 import java.util.Map;

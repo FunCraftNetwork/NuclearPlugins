@@ -12,7 +12,7 @@ import com.fcmcpe.nuclear.login.data.LoginData;
 import com.fcmcpe.nuclear.login.security.PasswordUtil;
 import com.fcmcpe.nuclear.login.NuclearLoginPlugin;
 import com.fcmcpe.nuclear.login.data.PlayerLoginResult;
-import com.fcmcpe.nuclear.login.language.TranslationSender;
+import com.fcmcpe.nuclear.core.language.TranslationSender;
 
 /**
  * Created on 2015/12/10 by xtypr.

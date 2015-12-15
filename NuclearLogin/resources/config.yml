@@ -19,30 +19,12 @@ minPasswordLength: 6
 maxPasswordLength: 16
 #Password hash algorithm
 #passwordHash: "sha256"
-#ServerAuth language
-language:
-  auto-detection-of-language: true
-  #To set the value only if you disabled auto language detection
-  #Available: zh, en, ru
-  language: ru
 #ServerAuth message prefix
 #prefix: "&1[ServerAuth] "
 #Show join message (defined on join-message in the current language file)
 show-join-message: true
 #Use MySQL (set this to false if you want to save data in local files)
 use-mysql: false
-#MySQL settings
-mysql:
-  #MySQL host
-  host: "host"
-  #MySQL port (default 3306)
-  port: 3306
-  #MySQL username
-  username: "username"
-  #MySQL password (you can leave it blank if your database doesn't need password)
-  password: ""
-  #MySQL ServerAuth database
-  database: "NuclearLogin"
 #Login settings
 login:
   #Enable login on your server

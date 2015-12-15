@@ -9,8 +9,6 @@ import com.fcmcpe.nuclear.login.command.LogoutCommand;
 import com.fcmcpe.nuclear.login.provider.LoginDataProviderMySQL;
 import com.fcmcpe.nuclear.login.provider.ProviderException;
 import com.fcmcpe.nuclear.login.task.SendLoginMsgTask;
-import com.fcmcpe.nuclear.core.ipgeo.BaiduIPGEO;
-import com.fcmcpe.nuclear.core.ipgeo.DummyIPGEO;
 import com.fcmcpe.nuclear.login.command.RegisterCommand;
 import com.fcmcpe.nuclear.login.command.UnregisterCommand;
 import com.fcmcpe.nuclear.login.listener.NuclearLoginListener;
@@ -38,21 +36,9 @@ public final class NuclearLoginPlugin extends PluginBase {
         try {
             /* Dictionary init */
             NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/login/language/");
-            /* Fire IP-GEO */
-            if (getConfig().getNestedAs("language.auto-detection-of-language", Boolean.TYPE))
-                NuclearCore.INSTANCE.setIPGEOEngine(new BaiduIPGEO());
-            else
-                NuclearCore.INSTANCE.setIPGEOEngine(new DummyIPGEO(getConfig().getNestedAs("language.language", String.class)));
             /* Fire Provider */
             String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/login/provider/mysql-init.sql"));
-            String sqlLink = "jdbc:mysql://" +
-                    getConfig().getNestedAs("mysql.host", String.class) + ":" +
-                    String.valueOf(getConfig().getNestedAs("mysql.port", Integer.TYPE)) + "/" +
-                    getConfig().getNestedAs("mysql.database", String.class) +
-                    "?allowMultiQueries=true";
-            String user = getConfig().getNestedAs("mysql.username", String.class);
-            String password = getConfig().getNestedAs("mysql.password", String.class);
-            NuclearLogin.INSTANCE.setDataProvider(new LoginDataProviderMySQL(this.getServer(), sql, sqlLink, user, password));
+            NuclearLogin.INSTANCE.setDataProvider(new LoginDataProviderMySQL(getServer(), sql, NuclearCore.INSTANCE.getMySQLLink()));
             /* Fire Tasks */
             getServer().getPluginManager().registerEvents(new NuclearLoginListener(this), this);
             getServer().getScheduler().scheduleRepeatingTask(new SendLoginMsgTask(this), 5);

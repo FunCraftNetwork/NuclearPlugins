@@ -18,22 +18,18 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     String defaultSQL;
 
     String url;
-    String user;
-    String password;
 
-    public LoginDataProviderMySQL(Server nukkit, String defaultSQL, String url, String user, String password){
+    public LoginDataProviderMySQL(Server nukkit, String defaultSQL, String url){
         this.nukkit = nukkit;
         this.defaultSQL = defaultSQL;
         this.url = url;
-        this.user = user;
-        this.password = password;
     }
 
     @Override
     public void open() throws ProviderException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             connection.setAutoCommit(false);
             Statement statement = connection.createStatement();
             String[] sqlArray = defaultSQL.split("-- Cutting Line --");
@@ -50,7 +46,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     @Override
     public void close() throws ProviderException {
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             if (connection != null) connection.close();
         } catch (Exception e) {
             throw new ProviderException("Exception caught when closing MySQL provider:", e);
@@ -61,7 +57,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     public PlayerLoginResult login(LoginData data) throws ProviderException {
         String playerName = data.getPlayer().getName().toLowerCase().trim();
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement("CALL `NuclearPlayerLogin`(?, ?, ?, ?)");
             statement.setString(1, playerName);
             statement.setString(2, data.getHash());
@@ -87,7 +83,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     public void logout(LoginData data) throws ProviderException {
         String playerName = data.getPlayer().getName().toLowerCase().trim();
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement("CALL `NuclearPlayerLogout`(?, ?, ?)");
             statement.setString(1, playerName);
             statement.setString(2, data.getLastAddress().getHostAddress());
@@ -103,7 +99,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     public PlayerCheckResult checkPlayer(LoginData data) throws ProviderException {
         String playerName = data.getPlayer().getName().toLowerCase().trim();
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement("CALL `NuclearPlayerCheck`(?, ?, ?)");
             statement.setString(1, playerName);
             statement.setString(2, data.getLastAddress().getHostAddress());
@@ -117,9 +113,9 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
             PlayerCheckResult result;
             while (resultSet.next()) {
                 exist = resultSet.getBoolean("exist");
-                matchIP = resultSet.getBoolean("matchip");
-                matchUUID = resultSet.getBoolean("matchuuid");
-                countIP = resultSet.getInt("countip");
+                matchIP = resultSet.getBoolean("matchIP");
+                matchUUID = resultSet.getBoolean("matchUUID");
+                countIP = resultSet.getInt("countIP");
                 countUUID = resultSet.getInt("countUUID");
             }
             result = new PlayerCheckResultImpl(exist, matchIP, matchUUID, countIP, countUUID);
@@ -134,7 +130,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     public PlayerUnregisterResult unregisterIfPresent(LoginData data) throws ProviderException {
         String playerName = data.getPlayer().getName().toLowerCase().trim();
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement("CALL `NuclearPlayerUnregister`(?, ?)");
             statement.setString(1, playerName);
             statement.setString(2, data.getHash());
@@ -157,7 +153,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     public void registerIfAbsent(LoginData data) throws ProviderException {
         String playerName = data.getPlayer().getName().toLowerCase().trim();
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement(
                     "CALL `NuclearPlayerRegister`(?, ?, ?, ?)"
             );
@@ -175,7 +171,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
     @Override
     public boolean selfCheck() {
         try {
-            Connection connection = DriverManager.getConnection(url, user, password);
+            Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement(
                     "DESCRIBE `NuclearData`;"
             );

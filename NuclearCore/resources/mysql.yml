@@ -1,0 +1,6 @@
+mysql:
+  host: "host"
+  port: 3306
+  user: "username"
+  password: ""
+  database: "NuclearLogin"

@@ -1,9 +1,8 @@
-package com.fcmcpe.nuclear.login.task;
+package com.fcmcpe.nuclear.core.language;
 
 import cn.nukkit.Server;
 import cn.nukkit.scheduler.AsyncTask;
 import com.fcmcpe.nuclear.core.NuclearCore;
-import com.fcmcpe.nuclear.login.language.TranslationSender;
 
 import java.util.Locale;
 
