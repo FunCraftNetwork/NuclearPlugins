@@ -30,7 +30,7 @@ public enum NuclearCore {
         Config mysqlConfig = new Config(new File(plugin.getDataFolder() ,"mysql.yml"), Config.YAML);
         try {
             return "jdbc:mysql://" +
-                    mysqlConfig.getNestedAs("mysql.host", String.class) + ":" +
+                    mysqlConfig.getNestedAs("mysql.host", String.class).trim() + ":" +
                     String.valueOf(mysqlConfig.getNestedAs("mysql.port", Integer.TYPE)) + "/" +
                     mysqlConfig.getNestedAs("mysql.database", String.class) +
                     "?allowMultiQueries=true" +
