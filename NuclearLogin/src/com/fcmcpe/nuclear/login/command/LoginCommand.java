@@ -7,7 +7,7 @@ import cn.nukkit.command.CommandSender;
 import com.fcmcpe.nuclear.login.NuclearLogin;
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
 import com.fcmcpe.nuclear.login.provider.LoginDataImpl;
-import com.fcmcpe.nuclear.login.provider.ProviderException;
+import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.login.data.LoginData;
 import com.fcmcpe.nuclear.login.security.PasswordUtil;
 import com.fcmcpe.nuclear.login.NuclearLoginPlugin;

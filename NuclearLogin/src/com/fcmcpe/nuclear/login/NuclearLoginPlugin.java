@@ -7,7 +7,7 @@ import com.fcmcpe.nuclear.core.language.NuclearDictionary;
 import com.fcmcpe.nuclear.login.command.LoginCommand;
 import com.fcmcpe.nuclear.login.command.LogoutCommand;
 import com.fcmcpe.nuclear.login.provider.LoginDataProviderMySQL;
-import com.fcmcpe.nuclear.login.provider.ProviderException;
+import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.login.task.SendLoginMsgTask;
 import com.fcmcpe.nuclear.login.command.RegisterCommand;
 import com.fcmcpe.nuclear.login.command.UnregisterCommand;

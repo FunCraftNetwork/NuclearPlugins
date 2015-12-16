@@ -1,6 +1,7 @@
 package com.fcmcpe.nuclear.login.provider;
 
 import cn.nukkit.Server;
+import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.login.data.LoginData;
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
 import com.fcmcpe.nuclear.login.data.PlayerLoginResult;
@@ -45,12 +46,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
 
     @Override
     public void close() throws ProviderException {
-        try {
-            Connection connection = DriverManager.getConnection(url);
-            if (connection != null) connection.close();
-        } catch (Exception e) {
-            throw new ProviderException("Exception caught when closing MySQL provider:", e);
-        }
+
     }
 
     @Override

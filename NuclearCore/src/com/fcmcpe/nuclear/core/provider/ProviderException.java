@@ -1,4 +1,4 @@
-package com.fcmcpe.nuclear.login.provider;
+package com.fcmcpe.nuclear.core.provider;
 
 /**
  * Created on 2015/12/9 by xtypr.

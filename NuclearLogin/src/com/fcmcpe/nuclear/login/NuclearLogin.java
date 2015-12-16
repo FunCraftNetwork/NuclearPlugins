@@ -2,7 +2,7 @@ package com.fcmcpe.nuclear.login;
 
 import cn.nukkit.IPlayer;
 import com.fcmcpe.nuclear.login.provider.LoginDataProvider;
-import com.fcmcpe.nuclear.login.provider.ProviderException;
+import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.login.provider.LoginDataProviderDummy;
 
 import java.util.*;

@@ -5,7 +5,7 @@ import com.fcmcpe.nuclear.login.NuclearLogin;
 import com.fcmcpe.nuclear.login.provider.LoginDataImpl;
 import com.fcmcpe.nuclear.login.NuclearLoginPlugin;
 import com.fcmcpe.nuclear.login.data.PlayerCheckResult;
-import com.fcmcpe.nuclear.login.provider.ProviderException;
+import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.core.language.TranslationSender;
 
 /**

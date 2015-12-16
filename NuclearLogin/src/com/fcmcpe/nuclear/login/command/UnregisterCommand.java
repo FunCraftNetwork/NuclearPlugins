@@ -8,7 +8,7 @@ import com.fcmcpe.nuclear.login.data.LoginData;
 import com.fcmcpe.nuclear.login.data.PlayerUnregisterResult;
 import com.fcmcpe.nuclear.core.language.TranslationSender;
 import com.fcmcpe.nuclear.login.provider.LoginDataImpl;
-import com.fcmcpe.nuclear.login.provider.ProviderException;
+import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.login.security.PasswordUtil;
 
 /**

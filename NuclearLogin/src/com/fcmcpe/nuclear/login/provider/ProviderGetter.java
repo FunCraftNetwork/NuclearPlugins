@@ -1,5 +1,7 @@
 package com.fcmcpe.nuclear.login.provider;
 
+import com.fcmcpe.nuclear.core.provider.ProviderException;
+
 /**
  * Created on 2015/12/11 by xtypr.
  * Package com.fcmcpe.nuclear.login.provider in project NuclearLogin .
@@ -7,7 +9,7 @@ package com.fcmcpe.nuclear.login.provider;
 public final class ProviderGetter {
 
     @SuppressWarnings("unchecked")
-    public static LoginDataProvider getProvider(String className) throws ProviderException{
+    public static LoginDataProvider getProvider(String className) throws ProviderException {
         try {
             Class rawClass = Class.forName(className);
             if (rawClass.isAssignableFrom(LoginDataProvider.class)) {
