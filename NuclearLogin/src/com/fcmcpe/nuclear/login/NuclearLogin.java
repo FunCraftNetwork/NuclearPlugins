@@ -18,8 +18,23 @@ public enum NuclearLogin {
 
     Map<String, Boolean> isLoggedIn = new LinkedHashMap<>();
     Map<String, Integer> loginAttempts = new LinkedHashMap<>();
+    Collection<String> weakPasswords = new ArrayList<>();
 
     private NuclearLogin(){}
+
+    public void mergeWeakPassword(String[] source) {
+        Collection<String> strings = new ArrayList<>();
+        Collections.addAll(strings, source);
+        mergeWeakPassword(strings);
+    }
+
+    public void mergeWeakPassword(Collection<String> source) {
+        weakPasswords.addAll(source);
+    }
+
+    public boolean isPasswordWeak(String password) {
+        return weakPasswords.contains(password.toLowerCase());
+    }
 
     public void setDataProvider(LoginDataProvider dataProvider) throws ProviderException {
         this.dataProvider = dataProvider;

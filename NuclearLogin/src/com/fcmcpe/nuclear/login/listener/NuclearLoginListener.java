@@ -71,6 +71,9 @@ public class NuclearLoginListener implements Listener{
         }
         if (!NuclearLogin.INSTANCE.isLoggedIn(player)) {
             NuclearLogin.INSTANCE.setLogin(event.getPlayer(), false);
+            if (plugin.getConfig().getNestedAs("show-join-message", Boolean.TYPE)) {
+                TranslationSender.INSTANCE.sendMessage(player, "nuclearlogin.msg.join");
+            }
             if (isRegistered) {
                 if (!plugin.getConfig().getNestedAs("login.enabled", Boolean.TYPE)) {
                     TranslationSender.INSTANCE.sendMessage(player, "nuclearlogin.error.login-disabled");

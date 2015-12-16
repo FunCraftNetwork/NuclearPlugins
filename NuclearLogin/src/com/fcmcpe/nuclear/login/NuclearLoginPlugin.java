@@ -19,14 +19,8 @@ import com.fcmcpe.nuclear.login.listener.NuclearLoginListener;
  */
 public final class NuclearLoginPlugin extends PluginBase {
 
-    private static NuclearLoginPlugin instance;
-    public static NuclearLoginPlugin getInstance(){
-        return instance;
-    }
-
     @Override
     public void onLoad() {
-        instance = this;
         saveDefaultConfig();
         /* Dictionary init */
         NuclearDictionary.registerPath(this, "com/fcmcpe/nuclear/login/language/");
@@ -36,6 +30,9 @@ public final class NuclearLoginPlugin extends PluginBase {
     @Override
     public void onEnable() {
         try {
+            /* Weak Password */
+            String weakPassword = Utils.readFile(getResource("com/fcmcpe/nuclear/login/weakpassword.list"));
+            NuclearLogin.INSTANCE.mergeWeakPassword(weakPassword.split("\\r?\\n"));
             /* Fire Provider */
             String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/login/provider/mysql-init.sql"));
             NuclearLogin.INSTANCE.setDataProvider(new LoginDataProviderMySQL(getServer(), sql, NuclearCore.INSTANCE.getMySQLLink()));

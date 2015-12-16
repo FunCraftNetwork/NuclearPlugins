@@ -44,6 +44,10 @@ public class RegisterCommand extends NuclearLoginCommand {
             password += arg + " ";
         }
         password = password.trim();
+        if (NuclearLogin.INSTANCE.isPasswordWeak(password)) {
+            TranslationSender.INSTANCE.sendMessage((Player) sender, "nuclearlogin.error.weak-password");
+            return false;
+        }
 
         String identifier = sender.getName().trim().toLowerCase();
         try {
