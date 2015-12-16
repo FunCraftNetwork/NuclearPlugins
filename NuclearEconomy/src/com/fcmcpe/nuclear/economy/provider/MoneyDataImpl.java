@@ -19,7 +19,7 @@ public class MoneyDataImpl implements MoneyData{
         this.money = money;
     }
 
-    MoneyDataImpl(Server nukkit, String playerName) {
+    public MoneyDataImpl(Server nukkit, String playerName) {
         this(nukkit, playerName, 0);
     }
 

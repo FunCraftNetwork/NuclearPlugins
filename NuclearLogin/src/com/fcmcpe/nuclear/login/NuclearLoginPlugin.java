@@ -50,13 +50,13 @@ public final class NuclearLoginPlugin extends PluginBase {
             selfCheck();
         } catch (ClassCastException | NullPointerException e1) {
             getServer().getLogger().logException(e1);
-            getServer().getLogger().alert("Not a valid config file!");
+            getLogger().alert("Not a valid config file!");
         } catch (ProviderException e2) {
             getServer().getLogger().logException(e2);
-            getServer().getLogger().alert("Exception caught in provider!");
+            getLogger().alert("Exception caught in provider!");
         } catch (Exception e3) {
             getServer().getLogger().logException(e3);
-            getServer().getLogger().alert("Unknown exception caught while enabling!");
+            getLogger().alert("Unknown exception caught while enabling!");
         }
         getLogger().info("I've enabled!");
     }

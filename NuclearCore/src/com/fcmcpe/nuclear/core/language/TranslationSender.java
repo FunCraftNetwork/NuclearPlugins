@@ -44,6 +44,14 @@ public enum TranslationSender {
         ));
     }
 
+    public void sendMessage(Player player, String translation, String... params){
+        player.sendMessage(NuclearDictionary.get(
+                localeMap.getOrDefault(player.getName().toLowerCase().trim(), Locale.getDefault()),
+                translation,
+                params
+        ));
+    }
+
     public void sendKick(Player player, String translation) {
         player.kick(NuclearDictionary.get(
                 localeMap.getOrDefault(player.getName().toLowerCase().trim(), Locale.getDefault()),
