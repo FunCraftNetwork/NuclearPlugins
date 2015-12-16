@@ -1,0 +1,13 @@
+#name, main, version and api are required
+name: NuclearRegions
+main: com.fcmcpe.nuclear.regions.NuclearRegionsPlugin
+#remember version and api is string, don't write it like this: 1.0.0, or there will be an exception
+version: "1"
+api: ["1.0.0"]
+
+load: STARTUP
+authors: ["Snake1999"]
+description: "Nuclear region guard plugin"
+website: https://github.com/FunCraftNetwork/NuclearPlugins
+
+depend: ["NuclearCore"]
