@@ -3,6 +3,7 @@ package com.fcmcpe.nuclear.economy.provider;
 import cn.nukkit.Server;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.economy.data.MoneyData;
+import com.fcmcpe.nuclear.economy.data.MoneyPayResult;
 
 import java.sql.*;
 
@@ -59,8 +60,30 @@ public class MoneyDataProviderMySQL implements MoneyDataProvider {
     }
 
     @Override
-    public void payMoney(String from, String to, long money) throws ProviderException {
-
+    public MoneyPayResult payMoney(String from, String to, long money) throws ProviderException {
+        String fromName = from.toLowerCase().trim();
+        String toName = to.toLowerCase().trim();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement statement = connection.prepareStatement("CALL `NuclearMoneyPay`(?, ?, ?)");
+            statement.setString(1, fromName);
+            statement.setString(2, toName);
+            statement.setLong(3, money);
+            ResultSet rs = statement.executeQuery();
+            boolean fromExist = false;
+            boolean toExist = false;
+            boolean fromEnough = false;
+            long paidMoney = 0;
+            while (rs.next()) {
+                fromExist = rs.getBoolean("fromExist");
+                toExist = rs.getBoolean("toExist");
+                fromEnough = rs.getBoolean("enough");
+                paidMoney = rs.getLong("money");
+            }
+            return new MoneyPayResultImpl(fromExist, toExist, fromEnough, paidMoney);
+        } catch (Exception e){
+            throw new ProviderException("Exception caught when "+fromName+ " paying to :"+toName, e);
+        }
     }
 
     @Override
@@ -87,6 +110,17 @@ public class MoneyDataProviderMySQL implements MoneyDataProvider {
 
     @Override
     public boolean selfCheck() {
-        return false;
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement statement = connection.prepareStatement(
+                    "DESCRIBE `NuclearEconomy`;"
+            );
+            statement.execute();
+            statement.close();
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 }

@@ -62,6 +62,7 @@ CREATE PROCEDURE `NuclearMoneyPay` (
     DECLARE `_from_exist` BOOLEAN DEFAULT FALSE;
     DECLARE `_to_exist` BOOLEAN DEFAULT FALSE;
     DECLARE `_success` BOOLEAN DEFAULT FALSE;
+    DECLARE `_paid_money` BIGINT DEFAULT 0;
     IF EXISTS (SELECT `money` FROM `NuclearEconomy` WHERE `name`=`_from`) THEN
       SET `_from_exist` = TRUE;
     END IF;
@@ -75,6 +76,7 @@ CREATE PROCEDURE `NuclearMoneyPay` (
       UPDATE `NuclearEconomy` SET `money`=`money`-`_money` WHERE `name`=`_from`;
       UPDATE `NuclearEconomy` SET `money`=`money`+`_money` WHERE `name`=`_to`;
       SET `_success`=TRUE;
+      SET `_paid_money`=`_money`;
     END IF;
     CREATE TABLE IF NOT EXISTS `_result_money_pay` (
       `from` VARCHAR(16) NOT NULL,
@@ -86,7 +88,7 @@ CREATE PROCEDURE `NuclearMoneyPay` (
       `success` BOOLEAN NOT NULL
     ) ENGINE = MEMORY;
     INSERT INTO `_result_money_pay` (`from`, `to`, `fromexist`, `toexist`, `money`, `enough`, `success`)
-    VALUES (`_from`, `_to`, `_from_exist`, `_to_exist`, `_money`, `_from_enough`, `_success`);
+    VALUES (`_from`, `_to`, `_from_exist`, `_to_exist`, `_paid_money`, `_from_enough`, `_success`);
     SELECT * FROM `_result_money_pay`;
     DROP TABLE IF EXISTS `_result_money_pay`;
   END;

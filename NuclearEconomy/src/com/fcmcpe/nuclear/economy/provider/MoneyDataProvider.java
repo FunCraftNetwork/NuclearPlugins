@@ -2,6 +2,7 @@ package com.fcmcpe.nuclear.economy.provider;
 
 import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.economy.data.MoneyData;
+import com.fcmcpe.nuclear.economy.data.MoneyPayResult;
 
 /**
  * Created on 2015/12/15 by xtypr.
@@ -15,7 +16,7 @@ public interface MoneyDataProvider {
 
     void registerIfAbsent(MoneyData data) throws ProviderException;
 
-    void payMoney(String from, String to, long money) throws ProviderException;
+    MoneyPayResult payMoney(String from, String to, long money) throws ProviderException;
 
     MoneyData getMoney(MoneyData data) throws ProviderException;
 
