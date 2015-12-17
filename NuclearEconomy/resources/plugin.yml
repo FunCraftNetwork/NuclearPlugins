@@ -2,7 +2,7 @@
 name: NuclearEconomy
 main: com.fcmcpe.nuclear.economy.NuclearEconomyPlugin
 #remember version and api is string, don't write it like this: 1.0.0, or there will be an exception
-version: "1"
+version: "1 bulid 2"
 api: ["1.0.0"]
 
 load: STARTUP

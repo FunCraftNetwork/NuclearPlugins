@@ -29,11 +29,15 @@ public class MoneySeeCommand extends NuclearEconomyCommand {
             return false;
         }
         Player player = (Player) sender;
+        if(args.length != 0) {
+            TranslationSender.INSTANCE.sendMessage(player, "nucleareconomy.description.see");
+            return false;
+        }
         try {
             MoneyData data = NuclearEconomy.INSTANCE.getDataProvider().getMoney(new MoneyDataImpl(plugin.getServer(), player.getName()));
-            TranslationSender.INSTANCE.sendMessage((Player) sender, "nucleareconomy.msg.seemoney", String.valueOf(data.getMoney()));
+            TranslationSender.INSTANCE.sendMessage(player, "nucleareconomy.msg.seemoney", String.valueOf(data.getMoney()));
         } catch (ProviderException | NullPointerException e) {
-            TranslationSender.INSTANCE.sendMessage((Player) sender, "nucleareconomy.error");
+            TranslationSender.INSTANCE.sendMessage(player, "nucleareconomy.error");
             e.printStackTrace();
             return false;
         }

@@ -5,6 +5,7 @@ import cn.nukkit.utils.Utils;
 import com.fcmcpe.nuclear.core.NuclearCore;
 import com.fcmcpe.nuclear.core.language.NuclearDictionary;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
+import com.fcmcpe.nuclear.economy.command.MoneyPayCommand;
 import com.fcmcpe.nuclear.economy.command.MoneySeeCommand;
 import com.fcmcpe.nuclear.economy.listener.NuclearEconomyListener;
 import com.fcmcpe.nuclear.economy.provider.MoneyDataProviderMySQL;
@@ -31,6 +32,7 @@ public final class NuclearEconomyPlugin extends PluginBase {
             /* Listener */
             getServer().getPluginManager().registerEvents(new NuclearEconomyListener(this), this);
             /* Register Commands */
+            getServer().getCommandMap().register("NuclearEconomy", new MoneyPayCommand(this));
             getServer().getCommandMap().register("NuclearEconomy", new MoneySeeCommand(this));
         } catch (ClassCastException | NullPointerException e1) {
             getServer().getLogger().logException(e1);

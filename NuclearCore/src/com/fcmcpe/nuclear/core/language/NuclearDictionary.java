@@ -103,7 +103,7 @@ public final class NuclearDictionary {
     public static String get(Locale locale, String msg, String... params){
         Objects.requireNonNull(locale);
         Objects.requireNonNull(msg);
-        Map<String, String> paramsMap = new HashMap<>();
+        Map<String, String> paramsMap = new LinkedHashMap<>();
         if(params != null){
             for(int i=0;i<params.length;i++){
                 paramsMap.put("{"+i+"}", params[i]);
