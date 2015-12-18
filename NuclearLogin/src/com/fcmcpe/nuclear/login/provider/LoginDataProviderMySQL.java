@@ -169,7 +169,7 @@ public class LoginDataProviderMySQL implements LoginDataProvider {
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement(
-                    "DESCRIBE `NuclearData`;"
+                    "DESCRIBE `NuclearLogin`;"
             );
             statement.execute();
             statement.close();

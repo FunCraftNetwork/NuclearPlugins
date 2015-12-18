@@ -34,7 +34,7 @@ public final class NuclearCorePlugin extends PluginBase {
         IPGEOEngine dummy = new DummyIPGEO(getConfig().getNestedAs("language.language", String.class));
         if (getConfig().getNestedAs("language.auto-detection-of-language", Boolean.TYPE)) {
             NuclearCore.INSTANCE.setIPGEOEngine(ClassGetter.getOrDefault(IPGEOEngine.class, getConfig().getNestedAs("language.ip-geo-engine", String.class), dummy));
-            System.out.println(NuclearCore.INSTANCE.getIPGEOEngine().getClass().toString()); //DEBUG
+            //System.out.println(NuclearCore.INSTANCE.getIPGEOEngine().getClass().toString()); //DEBUG
         } else {
             NuclearCore.INSTANCE.setIPGEOEngine(dummy);
         }

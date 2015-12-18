@@ -1,6 +1,25 @@
+/* Convert Old Data */
+
+DROP PROCEDURE IF EXISTS `_ConvertOldData`;
+-- Cutting Line --
+CREATE PROCEDURE `_ConvertOldData` ()
+  BEGIN
+    IF EXISTS (
+        SELECT * FROM `INFORMATION_SCHEMA`.`TABLES`
+        WHERE (`TABLE_NAME` = "NuclearData" AND `TABLE_SCHEMA`=(SELECT database())))
+    THEN
+      RENAME TABLE `NuclearData` TO `NuclearLogin`;
+    END IF;
+    DROP VIEW IF EXISTS `vNuclearData`;
+  END;
+-- Cutting Line --
+CALL `_ConvertOldData`();
+DROP PROCEDURE `_ConvertOldData`;
+
 /* Standard mysql database format for NuclearLogin  */
 
-CREATE TABLE IF NOT EXISTS `NuclearData` (
+-- Cutting Line --
+CREATE TABLE IF NOT EXISTS `NuclearLogin` (
   `name` VARCHAR(16) PRIMARY KEY,
   `hash` BINARY(64),
   `registerdate` DATETIME,
@@ -16,7 +35,7 @@ DROP PROCEDURE IF EXISTS `NuclearPlayerRegister`;
 DROP PROCEDURE IF EXISTS `NuclearPlayerUnregister`;
 DROP PROCEDURE IF EXISTS `NuclearPlayerLogin`;
 DROP PROCEDURE IF EXISTS `NuclearPlayerLogout`;
-DROP VIEW IF EXISTS `vNuclearData`;
+DROP VIEW IF EXISTS `vNuclearLogin`;
 
 -- Cutting Line --
 CREATE FUNCTION `UUIDToBinary`(cUUID char(36)) RETURNS binary(16)
@@ -42,17 +61,17 @@ CREATE PROCEDURE `NuclearPlayerCheck`(
     DECLARE `_matchuuid` BOOLEAN DEFAULT FALSE;
     DECLARE `_countip` INT(11) DEFAULT 0;
     DECLARE `_countuuid` INT(11) DEFAULT 0;
-    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearData` WHERE `name`=`_name`);
+    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearLogin` WHERE `name`=`_name`);
     IF `_exist` THEN
-      IF inet_aton(`_ip`) = (SELECT `lastip` FROM `NuclearData` WHERE `name`=`_name`) THEN
+      IF inet_aton(`_ip`) = (SELECT `lastip` FROM `NuclearLogin` WHERE `name`=`_name`) THEN
         SET `_matchip` = TRUE;
       END IF;
-      IF `UUIDToBinary`(`_uuid`) = (SELECT `lastuuid` FROM `NuclearData` WHERE `name`=`_name`) THEN
+      IF `UUIDToBinary`(`_uuid`) = (SELECT `lastuuid` FROM `NuclearLogin` WHERE `name`=`_name`) THEN
         SET `_matchuuid` = TRUE;
       END IF;
     END IF;
-    SET `_countip` = (SELECT count(*) FROM `NuclearData` WHERE `lastip`=inet_aton(`_ip`));
-    SET `_countuuid` = (SELECT count(*) FROM `NuclearData` WHERE `lastuuid`=`UUIDToBinary`(`_uuid`));
+    SET `_countip` = (SELECT count(*) FROM `NuclearLogin` WHERE `lastip`=inet_aton(`_ip`));
+    SET `_countuuid` = (SELECT count(*) FROM `NuclearLogin` WHERE `lastuuid`=`UUIDToBinary`(`_uuid`));
 
 
     CREATE TABLE IF NOT EXISTS `_result_check` (
@@ -77,8 +96,8 @@ CREATE PROCEDURE `NuclearPlayerRegister`(
   `_uuid` CHAR(36)
 )
   BEGIN
-    IF NOT EXISTS (SELECT `name` FROM `NuclearData` WHERE `name`=`_name`) THEN
-      INSERT INTO `NuclearData` (`name`, `hash`, `registerdate`, `logindate`, `lastip`, `lastuuid`)
+    IF NOT EXISTS (SELECT `name` FROM `NuclearLogin` WHERE `name`=`_name`) THEN
+      INSERT INTO `NuclearLogin` (`name`, `hash`, `registerdate`, `logindate`, `lastip`, `lastuuid`)
       VALUES (`_name`, unhex(`_hash`), now(), now(), inet_aton(`_ip`), `UUIDToBinary`(`_uuid`));
     END IF;
   END;
@@ -92,11 +111,11 @@ CREATE PROCEDURE `NuclearPlayerUnregister`(
 
     DECLARE `_exist` BOOLEAN DEFAULT FALSE;
     DECLARE `_hash_correct` BOOLEAN DEFAULT FALSE;
-    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearData` WHERE `name`=`_name`);
+    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearLogin` WHERE `name`=`_name`);
     IF `_exist` THEN
-      IF unhex(`_hash`) = (SELECT `hash` FROM `NuclearData` WHERE `name`=`_name`) THEN
+      IF unhex(`_hash`) = (SELECT `hash` FROM `NuclearLogin` WHERE `name`=`_name`) THEN
         SET `_hash_correct` = TRUE;
-        DELETE FROM `NuclearData` WHERE `name`= `_name`;
+        DELETE FROM `NuclearLogin` WHERE `name`= `_name`;
       ELSE
         SET `_hash_correct` = FALSE;
       END IF;
@@ -123,11 +142,11 @@ CREATE PROCEDURE `NuclearPlayerLogin`(
   BEGIN
     DECLARE `_exist` BOOLEAN DEFAULT FALSE;
     DECLARE `_success` BOOLEAN DEFAULT FALSE;
-    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearData` WHERE `name`=`_name`);
+    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearLogin` WHERE `name`=`_name`);
     IF `_exist` THEN
-      SET `_success` = unhex(`_hash`) = (SELECT `hash` FROM `NuclearData` WHERE `name`=`_name`);
+      SET `_success` = unhex(`_hash`) = (SELECT `hash` FROM `NuclearLogin` WHERE `name`=`_name`);
       IF `_success` THEN
-        UPDATE `NuclearData`
+        UPDATE `NuclearLogin`
         SET
           `logindate` = now(),
           `lastip` = inet_aton(`_ip`),
@@ -155,9 +174,9 @@ CREATE PROCEDURE `NuclearPlayerLogout`(
 )
   BEGIN
     DECLARE `_exist` BOOLEAN DEFAULT FALSE;
-    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearData` WHERE `name`=`_name`);
+    SET `_exist` = EXISTS (SELECT `name` FROM `NuclearLogin` WHERE `name`=`_name`);
     IF `_exist` THEN
-      UPDATE `NuclearData`
+      UPDATE `NuclearLogin`
       SET
         `logindate` = now(),
         `lastip` = inet_aton(`_ip`),
@@ -167,14 +186,14 @@ CREATE PROCEDURE `NuclearPlayerLogout`(
   END;
 
 -- Cutting Line --
-CREATE VIEW `vNuclearData` AS
+CREATE VIEW `vNuclearLogin` AS
   SELECT
-    `NuclearData`.`name` AS `name`,
-    HEX(`NuclearData`.`hash`) AS `hash`,
-    `NuclearData`.`registerdate` AS `registerdate`,
-    `NuclearData`.`logindate` AS `logindate`,
-    INET_NTOA(`NuclearData`.`lastip`) AS `lastip`,
-    BINARYTOUUID(`NuclearData`.`lastuuid`) AS `lastuuid`
+    `NuclearLogin`.`name` AS `name`,
+    HEX(`NuclearLogin`.`hash`) AS `hash`,
+    `NuclearLogin`.`registerdate` AS `registerdate`,
+    `NuclearLogin`.`logindate` AS `logindate`,
+    INET_NTOA(`NuclearLogin`.`lastip`) AS `lastip`,
+    BINARYTOUUID(`NuclearLogin`.`lastuuid`) AS `lastuuid`
   FROM
-    `NuclearData`
+    `NuclearLogin`
 ;
