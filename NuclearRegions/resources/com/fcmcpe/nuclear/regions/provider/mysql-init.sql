@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `NuclearRegions-Permission` (
 DROP FUNCTION IF EXISTS `IsCoordinateIn`;
 DROP FUNCTION IF EXISTS `IsRegionIn`;
 DROP PROCEDURE IF EXISTS `NuclearRegionAdd`;
+DROP PROCEDURE IF EXISTS `NuclearRegionRemove`;
 
 -- Cutting Line --
 CREATE FUNCTION `IsCoordinateIn` (
@@ -164,6 +165,7 @@ CREATE PROCEDURE `NuclearRegionAdd` (
     IF NOT `_conflict` THEN
       INSERT INTO `NuclearRegions-Location` (`fromX`, `deltaX`, `fromY`, `deltaY`, `fromZ`, `deltaZ`)
       VALUES (`_fromX`, `_deltaX`, `_fromY`, `_deltaY`, `_fromZ`, `_deltaZ`);
+      -- todo: INSERT INTO `NuclearRegions-Permission`
       SET `_id` = (SELECT `idRegion` FROM `NuclearRegions-Location` WHERE
         `fromX` = `_fromX` AND
         `deltaX` = `_deltaX` AND
@@ -182,4 +184,25 @@ CREATE PROCEDURE `NuclearRegionAdd` (
     VALUES (`_id`, `_conflict`);
     SELECT * FROM `_result_region_add`;
     DROP TABLE IF EXISTS `_result_region_add`;
+  END;
+
+-- Cutting Line --
+CREATE PROCEDURE `NuclearRegionRemove`(
+  `_id` INT
+)
+  BEGIN
+    DECLARE `_exist` BOOLEAN DEFAULT FALSE;
+    SET `_exist` = EXISTS(SELECT `idRegion` FROM `NuclearRegions-Location` WHERE `idRegion` = `_id`);
+    IF `_exist` THEN
+      DELETE FROM `NuclearRegions-Location` WHERE `idRegion` = `_id`;
+    END IF;
+
+    CREATE TABLE IF NOT EXISTS `_result_region_remove` (
+      `idRegion` INT NOT NULL,
+      `exist` BOOLEAN NOT NULL
+    ) ENGINE = MEMORY;
+    INSERT INTO `_result_region_remove` (`idRegion`, `exist`)
+    VALUES (`_id`, `_exist`);
+    SELECT * FROM `_result_region_remove`;
+    DROP TABLE IF EXISTS `_result_region_remove`;
   END;
