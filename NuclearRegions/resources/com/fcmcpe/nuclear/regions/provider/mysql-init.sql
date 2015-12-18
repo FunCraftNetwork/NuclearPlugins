@@ -188,7 +188,7 @@ CREATE PROCEDURE `NuclearRegionAdd` (
 
 -- Cutting Line --
 CREATE PROCEDURE `NuclearRegionRemove`(
-  `_id` INT
+  `_id` INT UNSIGNED
 )
   BEGIN
     DECLARE `_exist` BOOLEAN DEFAULT FALSE;
@@ -205,4 +205,25 @@ CREATE PROCEDURE `NuclearRegionRemove`(
     VALUES (`_id`, `_exist`);
     SELECT * FROM `_result_region_remove`;
     DROP TABLE IF EXISTS `_result_region_remove`;
+  END;
+
+-- Cutting Line --
+CREATE PROCEDURE `NuclearRegionPermUpdate` (
+  `_id` INT UNSIGNED,
+  `_name` VARCHAR(16),
+  `_perm` TEXT
+)
+  BEGIN
+    DECLARE `_exist` BOOLEAN DEFAULT FALSE;
+    SET `_exist` = EXISTS(SELECT `idRegion` FROM `NuclearRegions-Permission` WHERE `idRegion` = `_id`);
+    REPLACE INTO `NuclearRegions-Permission` (`idRegion`, `name`, `perm`)
+    VALUES (`_id`, `_name`, `_perm`);
+    CREATE TABLE IF NOT EXISTS `_result_region_perm_upd` (
+      `idRegion` INT NOT NULL,
+      `exist` BOOLEAN NOT NULL
+    ) ENGINE = MEMORY;
+    INSERT INTO `_result_region_perm_upd` (`idRegion`, `exist`)
+    VALUES (`_id`, `_exist`);
+    SELECT * FROM `_result_region_perm_upd`;
+    DROP TABLE IF EXISTS `_result_region_perm_upd`;
   END;
