@@ -35,9 +35,9 @@ public class CheckLocaleTask extends AsyncTask {
     public void onCompletion(Server server) {
         if (getResult() instanceof Locale) {
             TranslationSender.INSTANCE.setLocale(playerIdentifier, (Locale) getResult());
-        } else if (getResult() instanceof Exception) {
+        } else if (getResult() == null || getResult() instanceof Exception) {
             Exception e = (Exception) getResult();
-            Server.getInstance().getLogger().logException(e);
+            Server.getInstance().getLogger().logException(e == null? new NullPointerException(): e);
         }
     }
 }

@@ -1,6 +1,9 @@
 #language
 language:
+  #Enables IP-GEO Engine
   auto-detection-of-language: true
+  #Class name of IP-GEO Engine
+  ip-geo-engine: "com.fcmcpe.nuclear.core.ipgeo.DummyIPGEO"
   #To set the value only if you disabled auto language detection
   #Available: zh, en, ru
   language: zh

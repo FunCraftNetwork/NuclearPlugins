@@ -10,6 +10,10 @@ public class DummyIPGEO implements IPGEOEngine {
 
     private String languageTag;
 
+    public DummyIPGEO() {
+        this("en");
+    }
+
     public DummyIPGEO(String languageTag) {
         this.languageTag = languageTag;
     }

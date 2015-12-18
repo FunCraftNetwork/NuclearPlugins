@@ -1,8 +1,8 @@
 package com.fcmcpe.nuclear.core;
 
 import cn.nukkit.plugin.PluginBase;
-import com.fcmcpe.nuclear.core.ipgeo.BaiduIPGEO;
 import com.fcmcpe.nuclear.core.ipgeo.DummyIPGEO;
+import com.fcmcpe.nuclear.core.ipgeo.IPGEOEngine;
 import com.fcmcpe.nuclear.core.language.NuclearDictionary;
 import com.fcmcpe.nuclear.core.listener.CheckLocaleListener;
 
@@ -31,10 +31,13 @@ public final class NuclearCorePlugin extends PluginBase {
     @Override
     public void onEnable() {
         /* Fire IP-GEO */
-        if (getConfig().getNestedAs("language.auto-detection-of-language", Boolean.TYPE))
-            NuclearCore.INSTANCE.setIPGEOEngine(new BaiduIPGEO());
-        else
-            NuclearCore.INSTANCE.setIPGEOEngine(new DummyIPGEO(getConfig().getNestedAs("language.language", String.class)));
+        IPGEOEngine dummy = new DummyIPGEO(getConfig().getNestedAs("language.language", String.class));
+        if (getConfig().getNestedAs("language.auto-detection-of-language", Boolean.TYPE)) {
+            NuclearCore.INSTANCE.setIPGEOEngine(ClassGetter.getOrDefault(IPGEOEngine.class, getConfig().getNestedAs("language.ip-geo-engine", String.class), dummy));
+            System.out.println(NuclearCore.INSTANCE.getIPGEOEngine().getClass().toString()); //DEBUG
+        } else {
+            NuclearCore.INSTANCE.setIPGEOEngine(dummy);
+        }
         /* Register listeners and tasks */
         getServer().getPluginManager().registerEvents(new CheckLocaleListener(this), this);
         /* Self check */

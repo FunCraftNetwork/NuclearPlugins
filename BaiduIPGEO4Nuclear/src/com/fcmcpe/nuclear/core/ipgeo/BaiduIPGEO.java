@@ -17,6 +17,12 @@ import java.util.Map;
 public class BaiduIPGEO implements IPGEOEngine {
     Gson gson = new Gson();
 
+    private static String apiKey = "";
+
+    public static void setAPIKey(String apiKey){
+        BaiduIPGEO.apiKey = apiKey;
+    }
+
     @Override
     public Locale getLocaleFromIP(String ip) {
 
@@ -33,7 +39,7 @@ public class BaiduIPGEO implements IPGEOEngine {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             // 填入apikey到HTTP header
-            connection.setRequestProperty("apikey",  "126700afc5c2a15c0c9dfc413a8b47d4");
+            connection.setRequestProperty("apikey",  apiKey);
             connection.connect();
             InputStream is = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
@@ -49,6 +55,9 @@ public class BaiduIPGEO implements IPGEOEngine {
         }
 
         LocaleGetResult resultJson = gson.fromJson(result, LocaleGetResult.class);
+        if (resultJson.errNum != 0) {
+            return null;
+        }
 
         String countryStr = resultJson.retData.getOrDefault("country", "错误");
         if(countryStr.isEmpty()) countryStr = "错误";
@@ -68,7 +77,7 @@ public class BaiduIPGEO implements IPGEOEngine {
     }
 
     class LocaleGetResult{
-        //int errNum;
+        int errNum;
 
         //String errMsg;
 
