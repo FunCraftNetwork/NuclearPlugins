@@ -33,7 +33,6 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
         try {
             Connection connection = DriverManager.getConnection(url);
             Statement statement = connection.createStatement();
-            ResultSet rs1 = statement.executeQuery("SELECT * FROM `NuclearRegions-Location`;");
             ResultSet rs2 = statement.executeQuery("SELECT * FROM `NuclearRegions-Permission`;");
             Map<Integer, Map<String, Integer>> permissions = new HashMap<>();
             while (rs2.next()) {
@@ -41,6 +40,7 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
                 permission.putIfAbsent(rs2.getString("name"), rs2.getInt("perm"));
                 permissions.putIfAbsent(rs2.getInt("idRegion"), permission);
             }
+            ResultSet rs1 = statement.executeQuery("SELECT * FROM `NuclearRegions-Location`;");
             while (rs1.next()) {
                 int fromX = rs1.getInt("fromX");
                 int toX = fromX + rs1.getInt("deltaX");

@@ -11,9 +11,9 @@ CREATE TABLE IF NOT EXISTS `NuclearRegions-Location` (
 );
 
 CREATE TABLE IF NOT EXISTS `NuclearRegions-Permission` (
-  `idRegion` INT UNSIGNED NOT NULL,
+  `idRegion` INT UNSIGNED NOT NULL PRIMARY KEY,
   `name` VARCHAR(16) COMMENT 'Player Name',
-  `perm` BINARY(4)
+  `perm` INT(10)
 );
 
 DROP FUNCTION IF EXISTS `IsCoordinateIn`;
@@ -21,6 +21,7 @@ DROP FUNCTION IF EXISTS `IsRegionIn`;
 DROP PROCEDURE IF EXISTS `NuclearRegionAdd`;
 DROP PROCEDURE IF EXISTS `NuclearRegionRemove`;
 DROP PROCEDURE IF EXISTS `NuclearRegionPermUpdate`;
+DROP VIEW IF EXISTS `vNuclearRegions-Permission`;
 
 -- Cutting Line --
 CREATE FUNCTION `IsCoordinateIn` (
@@ -215,7 +216,7 @@ CREATE PROCEDURE `NuclearRegionRemove`(
 CREATE PROCEDURE `NuclearRegionPermUpdate` (
   `_id` INT UNSIGNED,
   `_name` VARCHAR(16),
-  `_perm` BINARY(4)
+  `_perm` INT(10)
 )
   BEGIN
     DECLARE `_exist` BOOLEAN DEFAULT FALSE;
