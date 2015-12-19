@@ -3,12 +3,13 @@ package com.fcmcpe.nuclear.regions.provider;
 import cn.nukkit.Server;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.regions.data.RegionData;
+import com.fcmcpe.nuclear.regions.math.RegionBox;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created on 2015/12/19 by xtypr.
@@ -28,7 +29,36 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
 
     @Override
     public Collection<RegionData> getAllData() throws ProviderException {
-        return null;
+        Collection<RegionData> dataCollection = new ArrayList<>();
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            Statement statement = connection.createStatement();
+            ResultSet rs1 = statement.executeQuery("SELECT * FROM `NuclearRegions-Location`;");
+            ResultSet rs2 = statement.executeQuery("SELECT * FROM `NuclearRegions-Permission`;");
+            Map<Integer, Map<String, Integer>> permissions = new HashMap<>();
+            while (rs2.next()) {
+                Map<String, Integer> permission = new HashMap<>();
+                permission.putIfAbsent(rs2.getString("name"), rs2.getInt("perm"));
+                permissions.putIfAbsent(rs2.getInt("idRegion"), permission);
+            }
+            while (rs1.next()) {
+                int fromX = rs1.getInt("fromX");
+                int toX = fromX + rs1.getInt("deltaX");
+                int fromY = rs1.getInt("fromY");
+                int toY = fromY + rs1.getInt("deltaY");
+                int fromZ = rs1.getInt("fromZ");
+                int toZ = fromZ + rs1.getInt("deltaZ");
+                String world = rs1.getString("world");
+                RegionBox box = RegionBox.of(fromX, fromY, fromZ, toX, toY, toZ, world);
+                int id = rs1.getInt("idRegion");
+                RegionData data = new RegionDataImpl(id, box, permissions.getOrDefault(id, new HashMap<>()));
+                dataCollection.add(data);
+            }
+            statement.close();
+            return dataCollection;
+        } catch (Exception e){
+            throw new ProviderException("Exception caught when fetching all data:", e);
+        }
     }
 
     @Override

@@ -12,7 +12,9 @@ public class RegionBox {
     private int maxY;
     private int maxZ;
 
-    public static RegionBox of(int x1, int y1, int z1, int x2, int y2, int z2) {
+    private String world;
+
+    public static RegionBox of(int x1, int y1, int z1, int x2, int y2, int z2, String world) {
         RegionBox box = new RegionBox();
         box.minX = Math.min(x1, x2);
         box.maxX = Math.max(x1, x2);
@@ -20,6 +22,7 @@ public class RegionBox {
         box.maxY = Math.max(y1, y2);
         box.minZ = Math.min(z1, z2);
         box.maxZ = Math.max(z1, z2);
+        box.world = world;
         return box;
     }
 
@@ -45,5 +48,9 @@ public class RegionBox {
 
     public int getMaxZ() {
         return maxZ;
+    }
+
+    public String getWorld() {
+        return world;
     }
 }

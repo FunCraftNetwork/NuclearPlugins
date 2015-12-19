@@ -22,7 +22,7 @@ public enum NuclearLogin {
 
     private NuclearLogin(){}
 
-    public void mergeWeakPassword(String[] source) {
+    public void mergeWeakPassword(String... source) {
         Collection<String> strings = new ArrayList<>();
         Collections.addAll(strings, source);
         mergeWeakPassword(strings);

@@ -12,21 +12,25 @@ import java.util.Map;
 public class RegionDataImpl implements RegionData {
 
     private int id;
-    public int x1;
-    public int y1;
-    public int z1;
-    public int x2;
-    public int y2;
-    public int z2;
+    private int x1;
+    private int y1;
+    private int z1;
+    private int x2;
+    private int y2;
+    private int z2;
+    private String world;
+    private Map<String, Integer> perm;
 
-    RegionDataImpl(int id, int x1, int y1, int z1, int x2, int y2, int z2) {
+    RegionDataImpl(int id, RegionBox box, Map<String, Integer> perm) {
         this.id = id;
-        this.x1 = x1;
-        this.y1 = y1;
-        this.z1 = z1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.z2 = z2;
+        this.x1 = box.getMinX();
+        this.y1 = box.getMinY();
+        this.z1 = box.getMinZ();
+        this.x2 = box.getMaxX();
+        this.y2 = box.getMaxY();
+        this.z2 = box.getMaxZ();
+        this.world = box.getWorld();
+        this.perm = perm;
     }
 
     @Override
@@ -36,11 +40,11 @@ public class RegionDataImpl implements RegionData {
 
     @Override
     public RegionBox getBox() {
-        return RegionBox.of(x1, y1, z1, x2, y2, z2);
+        return RegionBox.of(x1, y1, z1, x2, y2, z2, world);
     }
 
     @Override
     public Map<String, Integer> getPermissions() {
-        return null;
+        return perm;
     }
 }
