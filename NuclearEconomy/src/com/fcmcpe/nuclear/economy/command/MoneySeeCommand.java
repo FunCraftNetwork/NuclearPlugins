@@ -3,11 +3,11 @@ package com.fcmcpe.nuclear.economy.command;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import com.fcmcpe.nuclear.core.language.TranslationSender;
-import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.economy.NuclearEconomy;
 import com.fcmcpe.nuclear.economy.NuclearEconomyPlugin;
 import com.fcmcpe.nuclear.economy.data.MoneyData;
-import com.fcmcpe.nuclear.economy.provider.MoneyDataImpl;
+
+import java.util.Objects;
 
 /**
  * Created on 2015/12/15 by xtypr.
@@ -34,9 +34,10 @@ public class MoneySeeCommand extends NuclearEconomyCommand {
             return false;
         }
         try {
-            MoneyData data = NuclearEconomy.INSTANCE.getDataProvider().getMoney(new MoneyDataImpl(plugin.getServer(), player.getName()));
+            MoneyData data = NuclearEconomy.INSTANCE.getMoney(player.getName());
+            Objects.requireNonNull(data);
             TranslationSender.INSTANCE.sendMessage(player, "nucleareconomy.msg.seemoney", String.valueOf(data.getMoney()));
-        } catch (ProviderException | NullPointerException e) {
+        } catch (Exception e) {
             TranslationSender.INSTANCE.sendMessage(player, "nucleareconomy.error");
             e.printStackTrace();
             return false;
