@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `NuclearRegions-Location` (
   `idRegion` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `world` VARCHAR(16),
   `fromX` INT NOT NULL,
   `deltaX` INT NOT NULL,
   `fromY` TINYINT UNSIGNED NOT NULL,
@@ -12,13 +13,14 @@ CREATE TABLE IF NOT EXISTS `NuclearRegions-Location` (
 CREATE TABLE IF NOT EXISTS `NuclearRegions-Permission` (
   `idRegion` INT UNSIGNED NOT NULL,
   `name` VARCHAR(16) COMMENT 'Player Name',
-  `perm` TEXT
+  `perm` BINARY(4)
 );
 
 DROP FUNCTION IF EXISTS `IsCoordinateIn`;
 DROP FUNCTION IF EXISTS `IsRegionIn`;
 DROP PROCEDURE IF EXISTS `NuclearRegionAdd`;
 DROP PROCEDURE IF EXISTS `NuclearRegionRemove`;
+DROP PROCEDURE IF EXISTS `NuclearRegionPermUpdate`;
 
 -- Cutting Line --
 CREATE FUNCTION `IsCoordinateIn` (
@@ -123,12 +125,14 @@ CREATE FUNCTION `IsRegionIn` (
 
 -- Cutting Line --
 CREATE PROCEDURE `NuclearRegionAdd` (
+  `_world` VARCHAR(16),
   `_fromX` INT, `_deltaX` INT,
   `_fromY` TINYINT UNSIGNED, `_deltaY` TINYINT,
   `_fromZ` INT, `_deltaZ` INT
 )
   BEGIN
     DECLARE `_currentID` INT;
+    DECLARE `_cur_world` VARCHAR(16);
     DECLARE `_cur_fromX` INT;
     DECLARE `_cur_deltaX` INT;
     DECLARE `_cur_fromY` TINYINT UNSIGNED;
@@ -139,12 +143,12 @@ CREATE PROCEDURE `NuclearRegionAdd` (
     DECLARE `_conflict` BOOLEAN DEFAULT FALSE;
     DECLARE `_id` INT DEFAULT -1;
     DECLARE `rs` CURSOR FOR
-      SELECT `idRegion`, `fromX`, `deltaX`, `fromY`, `deltaY`, `fromZ`, `deltaZ`
+      SELECT `idRegion`, `world`, `fromX`, `deltaX`, `fromY`, `deltaY`, `fromZ`, `deltaZ`
       FROM `NuclearRegions-Location`;
     DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET `_done` = TRUE;
 
     OPEN `rs`;
-    FETCH `rs` INTO `_currentID`, `_cur_fromX`, `_cur_deltaX`, `_cur_fromY`, `_cur_deltaY`, `_cur_fromZ`, `_cur_deltaZ`;
+    FETCH `rs` INTO `_currentID`, `_cur_world`, `_cur_fromX`, `_cur_deltaX`, `_cur_fromY`, `_cur_deltaY`, `_cur_fromZ`, `_cur_deltaZ`;
     REPEAT
       IF NOT `_done` THEN
         IF (SELECT `IsRegionIn`(
@@ -154,17 +158,17 @@ CREATE PROCEDURE `NuclearRegionAdd` (
             `_cur_fromX`, `_cur_deltaX`,
             `_cur_fromY`, `_cur_deltaY`,
             `_cur_fromZ`, `_cur_deltaZ`
-        )) THEN
+        ) AND (`_cur_world` = `_world`)) THEN
           SET `_conflict` = TRUE;
         END IF;
       END IF;
-      FETCH `rs` INTO `_currentID`, `_cur_fromX`, `_cur_deltaX`, `_cur_fromY`, `_cur_deltaY`, `_cur_fromZ`, `_cur_deltaZ`;
+      FETCH `rs` INTO `_currentID`, `_cur_world`, `_cur_fromX`, `_cur_deltaX`, `_cur_fromY`, `_cur_deltaY`, `_cur_fromZ`, `_cur_deltaZ`;
     UNTIL `_done` END REPEAT;
     CLOSE `rs`;
 
     IF NOT `_conflict` THEN
-      INSERT INTO `NuclearRegions-Location` (`fromX`, `deltaX`, `fromY`, `deltaY`, `fromZ`, `deltaZ`)
-      VALUES (`_fromX`, `_deltaX`, `_fromY`, `_deltaY`, `_fromZ`, `_deltaZ`);
+      INSERT INTO `NuclearRegions-Location` (`world`, `fromX`, `deltaX`, `fromY`, `deltaY`, `fromZ`, `deltaZ`)
+      VALUES (`_cur_world`, `_fromX`, `_deltaX`, `_fromY`, `_deltaY`, `_fromZ`, `_deltaZ`);
       -- todo: INSERT INTO `NuclearRegions-Permission`
       SET `_id` = (SELECT `idRegion` FROM `NuclearRegions-Location` WHERE
         `fromX` = `_fromX` AND
@@ -211,7 +215,7 @@ CREATE PROCEDURE `NuclearRegionRemove`(
 CREATE PROCEDURE `NuclearRegionPermUpdate` (
   `_id` INT UNSIGNED,
   `_name` VARCHAR(16),
-  `_perm` TEXT
+  `_perm` BINARY(4)
 )
   BEGIN
     DECLARE `_exist` BOOLEAN DEFAULT FALSE;
