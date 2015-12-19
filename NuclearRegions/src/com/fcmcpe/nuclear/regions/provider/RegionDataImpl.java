@@ -2,7 +2,6 @@ package com.fcmcpe.nuclear.regions.provider;
 
 import com.fcmcpe.nuclear.regions.data.RegionData;
 import com.fcmcpe.nuclear.regions.math.RegionBox;
-import com.fcmcpe.nuclear.regions.permission.RegionPermission;
 
 import java.util.Map;
 
@@ -41,7 +40,7 @@ public class RegionDataImpl implements RegionData {
     }
 
     @Override
-    public Map<String, RegionPermission> getPermissions() {
+    public Map<String, Integer> getPermissions() {
         return null;
     }
 }

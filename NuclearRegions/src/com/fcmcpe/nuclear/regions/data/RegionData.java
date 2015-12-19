@@ -1,7 +1,6 @@
 package com.fcmcpe.nuclear.regions.data;
 
 import com.fcmcpe.nuclear.regions.math.RegionBox;
-import com.fcmcpe.nuclear.regions.permission.RegionPermission;
 
 import java.util.Map;
 
@@ -15,6 +14,6 @@ public interface RegionData {
 
     RegionBox getBox();
 
-    Map<String, RegionPermission> getPermissions();
+    Map<String, Integer> getPermissions();
 
 }
