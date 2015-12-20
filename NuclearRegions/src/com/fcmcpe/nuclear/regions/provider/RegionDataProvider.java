@@ -2,6 +2,7 @@ package com.fcmcpe.nuclear.regions.provider;
 
 import com.fcmcpe.nuclear.core.provider.DataProvider;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
+import com.fcmcpe.nuclear.regions.data.RegionAddResult;
 import com.fcmcpe.nuclear.regions.data.RegionData;
 
 import java.util.Collection;
@@ -14,7 +15,7 @@ public interface RegionDataProvider extends DataProvider {
 
     Collection<RegionData> getAllData() throws ProviderException;
 
-    RegionData addRegion(RegionData data) throws ProviderException;
+    RegionAddResult addRegion(RegionData data) throws ProviderException;
 
     void removeRegion(RegionData data) throws ProviderException;
 

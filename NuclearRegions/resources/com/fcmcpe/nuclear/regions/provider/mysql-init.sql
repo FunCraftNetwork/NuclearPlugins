@@ -21,7 +21,6 @@ DROP FUNCTION IF EXISTS `IsRegionIn`;
 DROP PROCEDURE IF EXISTS `NuclearRegionAdd`;
 DROP PROCEDURE IF EXISTS `NuclearRegionRemove`;
 DROP PROCEDURE IF EXISTS `NuclearRegionPermUpdate`;
-DROP VIEW IF EXISTS `vNuclearRegions-Permission`;
 
 -- Cutting Line --
 CREATE FUNCTION `IsCoordinateIn` (

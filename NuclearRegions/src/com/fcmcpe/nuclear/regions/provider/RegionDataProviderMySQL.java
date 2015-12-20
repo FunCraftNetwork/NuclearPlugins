@@ -2,6 +2,7 @@ package com.fcmcpe.nuclear.regions.provider;
 
 import cn.nukkit.Server;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
+import com.fcmcpe.nuclear.regions.data.RegionAddResult;
 import com.fcmcpe.nuclear.regions.data.RegionData;
 import com.fcmcpe.nuclear.regions.math.RegionBox;
 
@@ -62,8 +63,28 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
     }
 
     @Override
-    public RegionData addRegion(RegionData data) throws ProviderException {
-        return null;
+    public RegionAddResult addRegion(RegionData data) throws ProviderException {
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement statement = connection.prepareStatement("CALL `NuclearRegionAdd`(?, ?, ?, ?, ?, ?, ?);");
+            statement.setString(1, data.getBox().getWorld());
+            statement.setInt(2, data.getBox().getMinX());
+            statement.setInt(3, data.getBox().getMaxX() - data.getBox().getMinX());
+            statement.setInt(4, data.getBox().getMinY());
+            statement.setInt(5, data.getBox().getMaxY() - data.getBox().getMinY());
+            statement.setInt(6, data.getBox().getMinZ());
+            statement.setInt(7, data.getBox().getMaxZ() - data.getBox().getMinZ());
+            ResultSet rs = statement.executeQuery();
+            int idRegion = -1;
+            boolean conflict = false;
+            while (rs.next()) {
+                idRegion = rs.getInt("idRegion");
+                conflict = rs.getBoolean("conflict");
+            }
+            return new RegionAddResultImpl(new RegionDataImpl(idRegion, data.getBox(), new HashMap<>()), conflict);
+        } catch (Exception e) {
+            throw new ProviderException("Exception caught when adding region:", e);
+        }
     }
 
     @Override

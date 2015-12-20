@@ -9,7 +9,7 @@ import java.util.Map;
  * Created on 2015/12/18 by xtypr.
  * Package com.fcmcpe.nuclear.regions.provider in project NuclearPlugins .
  */
-public class RegionDataImpl implements RegionData {
+class RegionDataImpl implements RegionData {
 
     private int id;
     private int x1;
