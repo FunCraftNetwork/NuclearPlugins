@@ -21,10 +21,13 @@ public final class NuclearRegionsPlugin extends PluginBase {
     public void onEnable() {
         try {
             /* Fire provider */
-            String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/login/provider/mysql-init.sql"));
+            String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/regions/provider/mysql-init.sql"));
             NuclearRegions.INSTANCE.setDataProvider(new RegionDataProviderMySQL(getServer(), sql, NuclearCore.INSTANCE.getMySQLLink()));
             /* Self check */
             selfCheck();
+            /* Reload data */
+            NuclearRegions.INSTANCE.reloadRegionData();
+            getLogger().info("All region data reloaded.");
         } catch (ClassCastException | NullPointerException e1) {
             getServer().getLogger().logException(e1);
             getLogger().alert("Not a valid config file!");
