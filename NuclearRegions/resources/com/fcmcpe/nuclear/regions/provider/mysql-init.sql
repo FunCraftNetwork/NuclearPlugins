@@ -169,7 +169,6 @@ CREATE PROCEDURE `NuclearRegionAdd` (
     IF NOT `_conflict` THEN
       INSERT INTO `NuclearRegions-Location` (`world`, `fromX`, `deltaX`, `fromY`, `deltaY`, `fromZ`, `deltaZ`)
       VALUES (`_cur_world`, `_fromX`, `_deltaX`, `_fromY`, `_deltaY`, `_fromZ`, `_deltaZ`);
-      -- todo: INSERT INTO `NuclearRegions-Permission`
       SET `_id` = (SELECT `idRegion` FROM `NuclearRegions-Location` WHERE
         `fromX` = `_fromX` AND
         `deltaX` = `_deltaX` AND
@@ -178,6 +177,8 @@ CREATE PROCEDURE `NuclearRegionAdd` (
         `fromZ` = `_fromZ` AND
         `deltaZ` = `_deltaZ`
       );
+      INSERT INTO `NuclearRegions-Permission` (`idRegion`, `name`, `perm`)
+      VALUES (`_id`, '', 0);
     END IF;
 
     CREATE TABLE IF NOT EXISTS `_result_region_add` (
