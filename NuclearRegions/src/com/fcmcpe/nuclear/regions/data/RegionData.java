@@ -1,6 +1,6 @@
 package com.fcmcpe.nuclear.regions.data;
 
-import com.fcmcpe.nuclear.regions.math.RegionBox;
+import com.fcmcpe.nuclear.regions.math.ZonedRegionBox;
 
 import java.util.Map;
 

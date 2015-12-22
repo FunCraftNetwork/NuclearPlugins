@@ -1,12 +1,12 @@
 CREATE TABLE IF NOT EXISTS `NuclearRegions-Location` (
   `idRegion` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `world` VARCHAR(16),
-  `fromX` INT NOT NULL,
-  `deltaX` INT NOT NULL,
+  `fromX` INT,
+  `deltaX` INT,
   `fromY` TINYINT UNSIGNED NOT NULL,
   `deltaY` TINYINT NOT NULL,
-  `fromZ` INT NOT NULL,
-  `deltaZ` INT NOT NULL,
+  `fromZ` INT,
+  `deltaZ` INT,
   UNIQUE INDEX `idRegion_UNIQUE` (`idRegion` ASC)
 );
 

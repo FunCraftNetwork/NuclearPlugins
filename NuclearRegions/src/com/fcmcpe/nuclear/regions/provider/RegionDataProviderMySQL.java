@@ -4,7 +4,7 @@ import cn.nukkit.Server;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.regions.data.RegionAddResult;
 import com.fcmcpe.nuclear.regions.data.RegionData;
-import com.fcmcpe.nuclear.regions.math.RegionBox;
+import com.fcmcpe.nuclear.regions.math.ZonedRegionBox;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,9 +50,9 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
                 int fromZ = rs1.getInt("fromZ");
                 int toZ = fromZ + rs1.getInt("deltaZ");
                 String world = rs1.getString("world");
-                RegionBox box = RegionBox.of(fromX, fromY, fromZ, toX, toY, toZ, world);
+                ZonedRegionBox box = ZonedRegionBox.of(fromX, fromY, fromZ, toX, toY, toZ, world);
                 int id = rs1.getInt("idRegion");
-                RegionData data = new RegionDataImpl(id, box, permissions.getOrDefault(id, new HashMap<>()));
+                RegionData data = new BoxedRegionData(id, box, permissions.getOrDefault(id, new HashMap<>()));
                 dataCollection.add(data);
             }
             statement.close();
@@ -67,21 +67,25 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
         try {
             Connection connection = DriverManager.getConnection(url);
             PreparedStatement statement = connection.prepareStatement("CALL `NuclearRegionAdd`(?, ?, ?, ?, ?, ?, ?);");
-            statement.setString(1, data.getBox().getWorld());
-            statement.setInt(2, data.getBox().getMinX());
-            statement.setInt(3, data.getBox().getMaxX() - data.getBox().getMinX());
-            statement.setInt(4, data.getBox().getMinY());
-            statement.setInt(5, data.getBox().getMaxY() - data.getBox().getMinY());
-            statement.setInt(6, data.getBox().getMinZ());
-            statement.setInt(7, data.getBox().getMaxZ() - data.getBox().getMinZ());
-            ResultSet rs = statement.executeQuery();
-            int idRegion = -1;
-            boolean conflict = false;
-            while (rs.next()) {
-                idRegion = rs.getInt("idRegion");
-                conflict = rs.getBoolean("conflict");
+            if (data.getBox() instanceof ZonedRegionBox) {
+                ZonedRegionBox box = (ZonedRegionBox) data.getBox();
+                statement.setString(1, box.getLevelName());
+                statement.setInt(2, box.getMinX());
+                statement.setInt(3, box.getMaxX() - box.getMinX());
+                statement.setInt(4, box.getMinY());
+                statement.setInt(5, box.getMaxY() - box.getMinY());
+                statement.setInt(6, box.getMinZ());
+                statement.setInt(7, box.getMaxZ() - box.getMinZ());
+                ResultSet rs = statement.executeQuery();
+                int idRegion = -1;
+                boolean conflict = false;
+                while (rs.next()) {
+                    idRegion = rs.getInt("idRegion");
+                    conflict = rs.getBoolean("conflict");
+                }
+                return new RegionAddResultImpl(new BoxedRegionData(idRegion, box, new HashMap<>()), conflict);
             }
-            return new RegionAddResultImpl(new RegionDataImpl(idRegion, data.getBox(), new HashMap<>()), conflict);
+            return null;
         } catch (Exception e) {
             throw new ProviderException("Exception caught when adding region:", e);
         }
