@@ -1,5 +1,7 @@
 package com.fcmcpe.nuclear.regions.math;
 
+import cn.nukkit.level.Position;
+
 /**
  * Created on 2015/12/18 by xtypr.
  * Package com.fcmcpe.nuclear.regions.math in project NuclearPlugins .
@@ -52,5 +54,16 @@ public class RegionBox {
 
     public String getWorld() {
         return world;
+    }
+
+    public boolean isInBox(Position position) {
+        return ((position.getX() >= minX) && (position.getX() <= maxX)) &&
+                ((position.getY() >= minY) && (position.getY() <= maxY)) &&
+                ((position.getZ() >= minZ) && (position.getZ() <= maxZ));
+    }
+
+    @Override
+    public String toString() {
+        return "RegionBox[("+minX+","+minY+","+minZ+") to ("+maxX+","+maxY+","+maxZ+")]";
     }
 }

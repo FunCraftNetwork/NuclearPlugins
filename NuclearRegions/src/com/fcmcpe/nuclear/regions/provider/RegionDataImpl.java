@@ -47,4 +47,9 @@ class RegionDataImpl implements RegionData {
     public Map<String, Integer> getPermissions() {
         return perm;
     }
+
+    @Override
+    public String toString() {
+        return "RegionData[id:"+id+" ("+x1+","+y1+","+z1+") to ("+x2+","+y2+","+z2+")]";
+    }
 }

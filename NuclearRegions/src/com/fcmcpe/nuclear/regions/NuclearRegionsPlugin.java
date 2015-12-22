@@ -4,6 +4,7 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Utils;
 import com.fcmcpe.nuclear.core.NuclearCore;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
+import com.fcmcpe.nuclear.regions.listener.NuclearRegionListener;
 import com.fcmcpe.nuclear.regions.provider.RegionDataProviderMySQL;
 
 /**
@@ -23,6 +24,8 @@ public final class NuclearRegionsPlugin extends PluginBase {
             /* Fire provider */
             String sql = Utils.readFile(getResource("com/fcmcpe/nuclear/regions/provider/mysql-init.sql"));
             NuclearRegions.INSTANCE.setDataProvider(new RegionDataProviderMySQL(getServer(), sql, NuclearCore.INSTANCE.getMySQLLink()));
+            /* Fire listener */
+            getServer().getPluginManager().registerEvents(new NuclearRegionListener(this), this);
             /* Self check */
             selfCheck();
             /* Reload data */
