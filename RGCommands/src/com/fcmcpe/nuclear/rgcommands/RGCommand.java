@@ -29,6 +29,10 @@ public class RGCommand extends Command {
         /rg pos2
         /rg create
         /rg remove [id region]
+        /rg addmember [name player] [id region]
+        /rg removemember [name player] [id region]
+        /rg addowner [name player] [id regon]
+        /rg removeowner [name player] [id regon]
         /rg flag [id region] [flag] [allow/deny]
         /rg info - info region where you stand
         /rg info [id region]
