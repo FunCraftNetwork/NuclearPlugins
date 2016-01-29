@@ -9,4 +9,6 @@ import cn.nukkit.level.Position;
 public interface RegionBox {
 
     boolean isInBox(Position position);
+
+    double getSize();
 }

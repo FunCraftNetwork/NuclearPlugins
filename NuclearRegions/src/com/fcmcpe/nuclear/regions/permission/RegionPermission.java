@@ -20,7 +20,7 @@ public final class RegionPermission {
     public static final int GRANT_USER = 0x01000000;
     public static final int GRANT_ADMIN = 0x02000000;
     public static final int GRANT_ALL = 0x0F000000;
-    public static final int ALL = 0xFFFFFFFF;
+    public static final int OWNER = 0xFFFFFFFF;
 
     private int code;
 

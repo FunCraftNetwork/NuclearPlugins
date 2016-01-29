@@ -67,6 +67,13 @@ public class ZonedRegionBox implements RegionBox {
     }
 
     @Override
+    public double getSize() {
+        return ((double) getMaxX() - (double) getMinX()) *
+                ((double) getMaxY() - (double) getMinY()) *
+                ((double) getMaxZ() - (double) getMinZ());
+    }
+
+    @Override
     public String toString() {
         return "RegionBox["+levelName+":("+minX+","+minY+","+minZ+") to ("+maxX+","+maxY+","+maxZ+")]";
     }

@@ -1,6 +1,6 @@
 package com.fcmcpe.nuclear.regions.data;
 
-import com.fcmcpe.nuclear.regions.math.ZonedRegionBox;
+import com.fcmcpe.nuclear.regions.permission.RegionPermission;
 
 import java.util.Map;
 
@@ -15,5 +15,13 @@ public interface RegionData {
     RegionBox getBox();
 
     Map<String, Integer> getPermissions();
+
+    default String getOwnerName() {
+        final String[] found = {null};
+        getPermissions().forEach((s, i) -> {
+            if (RegionPermission.of(i).hasPermission(RegionPermission.OWNER)) found[0] = s;
+        });
+        return found[0];
+    }
 
 }

@@ -22,13 +22,11 @@ import java.util.Map;
  */
 public class NuclearRegionListener implements Listener {
     NuclearRegionsPlugin plugin;
-
+    private Map<Player, Long> lastCalcTime = new HashMap<>();
+    private Map<Player, Location> lastValidLoc = new HashMap<>();
     public NuclearRegionListener(NuclearRegionsPlugin plugin){
         this.plugin = plugin;
     }
-
-    private Map<Player, Long> lastCalcTime = new HashMap<>();
-    private Map<Player, Location> lastValidLoc = new HashMap<>();
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event){
@@ -37,10 +35,10 @@ public class NuclearRegionListener implements Listener {
         if ((lastCalcTime.get(player) + 200) < System.currentTimeMillis()) {
             RegionData inRegion = NuclearRegions.INSTANCE.getInRegion(player);
             if (inRegion != null) {
-                if (!RegionPermission.of(inRegion, player).hasPermission(RegionPermission.ENTER)) {
+                if (!(RegionPermission.of(inRegion, player).hasPermission(RegionPermission.ENTER))) {
                     Location location = lastValidLoc.getOrDefault(player, event.getFrom());
                     if (location.getLevel() == player.getLevel()) player.teleport(location);
-                    player.sendTip("CAN NOT MOVE INTO"); //test //language
+                    player.sendTip("CAN NOT MOVE INTO"); // TODO: 2016/1/29 LANGUAGE
                     event.setCancelled();
                 }
             } else {
@@ -55,7 +53,7 @@ public class NuclearRegionListener implements Listener {
         Player player = event.getPlayer();
         RegionData inRegion = NuclearRegions.INSTANCE.getInRegion(event.getBlock());
         if (inRegion != null) {
-            if (!RegionPermission.of(inRegion, player).hasPermission(RegionPermission.BLOCK_BREAK)) {
+            if (!(RegionPermission.of(inRegion, player).hasPermission(RegionPermission.BLOCK_BREAK))) {
                 player.sendTip("BLOCK CAN NOT BREAK");//test //language
                 event.setCancelled();
             }
@@ -67,7 +65,7 @@ public class NuclearRegionListener implements Listener {
         Player player = event.getPlayer();
         RegionData inRegion = NuclearRegions.INSTANCE.getInRegion(event.getBlock());
         if (inRegion != null) {
-            if (!RegionPermission.of(inRegion, player).hasPermission(RegionPermission.BLOCK_PLACE)) {
+            if (!(RegionPermission.of(inRegion, player).hasPermission(RegionPermission.BLOCK_PLACE))) {
                 player.sendTip("BLOCK CAN NOT PLACE");//test //language
                 event.setCancelled();
             }

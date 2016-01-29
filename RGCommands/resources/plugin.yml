@@ -1,0 +1,13 @@
+#name, main, version and api are required
+name: RGCommands
+main: com.fcmcpe.nuclear.rgcommands.RGCommandsPlugin
+#remember version and api is string, don't write it like this: 1.0.0, or there will be an exception
+version: "1"
+api: ["1.0.0"]
+
+load: STARTUP
+authors: ["Snake1999"]
+description: "/rg command for NuclearRegions plugin"
+website: https://github.com/FunCraftNetwork/NuclearPlugins
+
+depend: ["NuclearCore", "NuclearRegions"]
