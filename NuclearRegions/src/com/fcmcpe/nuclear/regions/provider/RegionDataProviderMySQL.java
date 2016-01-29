@@ -4,6 +4,7 @@ import cn.nukkit.Server;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.regions.data.RegionAddResult;
 import com.fcmcpe.nuclear.regions.data.RegionData;
+import com.fcmcpe.nuclear.regions.data.RegionPermUpdateResult;
 import com.fcmcpe.nuclear.regions.math.ZonedRegionBox;
 
 import java.sql.*;
@@ -52,7 +53,7 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
                 String world = rs1.getString("world");
                 ZonedRegionBox box = ZonedRegionBox.of(fromX, fromY, fromZ, toX, toY, toZ, world);
                 int id = rs1.getInt("idRegion");
-                RegionData data = new BoxedRegionData(id, box, permissions.getOrDefault(id, new HashMap<>()));
+                RegionData data = new $BoxedRegionData$(id, box, permissions.getOrDefault(id, new HashMap<>()));
                 dataCollection.add(data);
             }
             statement.close();
@@ -83,7 +84,7 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
                     idRegion = rs.getInt("idRegion");
                     conflict = rs.getBoolean("conflict");
                 }
-                return new RegionAddResultImpl(new BoxedRegionData(idRegion, box, new HashMap<>()), conflict);
+                return new $RegionAddResultImpl$(new $BoxedRegionData$(idRegion, box, new HashMap<>()), conflict);
             }
             return null;
         } catch (Exception e) {
@@ -97,8 +98,24 @@ public class RegionDataProviderMySQL implements RegionDataProvider {
     }
 
     @Override
-    public RegionData updatePerm(RegionData data) throws ProviderException {
-        return null;
+    public RegionPermUpdateResult updatePerm(int regionID, String playerName, int perm) throws ProviderException {
+        try {
+            Connection connection = DriverManager.getConnection(url);
+            PreparedStatement statement = connection.prepareStatement("CALL `NuclearRegionPermUpdate`(?, ?, ?);");
+            statement.setInt(1, regionID);
+            statement.setString(2, playerName);
+            statement.setInt(3, perm);
+            ResultSet rs = statement.executeQuery();
+            int idRegion = -1;
+            boolean exist = false;
+            while (rs.next()) {
+                idRegion = rs.getInt("idRegion");
+                exist = rs.getBoolean("exist");
+            }
+            return new $UpdPermResultImpl$(idRegion, exist);
+        } catch (Exception e) {
+            throw new ProviderException("Exception caught when updating permission:", e);
+        }
     }
 
     public void open() throws ProviderException {

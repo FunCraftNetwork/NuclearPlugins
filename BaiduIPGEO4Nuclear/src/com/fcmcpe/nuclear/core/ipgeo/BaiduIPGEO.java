@@ -15,9 +15,8 @@ import java.util.Map;
  * Package com.fcmcpe.nuclear.core.ipgeo in project NuclearLogin .
  */
 public class BaiduIPGEO implements IPGEOEngine {
-    Gson gson = new Gson();
-
     private static String apiKey = "";
+    Gson gson = new Gson();
 
     public static void setAPIKey(String apiKey){
         BaiduIPGEO.apiKey = apiKey;
@@ -55,9 +54,8 @@ public class BaiduIPGEO implements IPGEOEngine {
         }
 
         LocaleGetResult resultJson = gson.fromJson(result, LocaleGetResult.class);
-        if (resultJson.errNum != 0) {
-            return null;
-        }
+        if (resultJson == null) return null;
+        if (resultJson.errNum != 0) return null;
 
         String countryStr = resultJson.retData.getOrDefault("country", "错误");
         if(countryStr.isEmpty()) countryStr = "错误";

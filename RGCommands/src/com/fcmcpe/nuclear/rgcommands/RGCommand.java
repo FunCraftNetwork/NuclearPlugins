@@ -7,10 +7,13 @@ import cn.nukkit.level.Position;
 import com.fcmcpe.nuclear.core.language.NuclearDictionary;
 import com.fcmcpe.nuclear.core.language.TranslationSender;
 import com.fcmcpe.nuclear.regions.NuclearRegions;
+import com.fcmcpe.nuclear.regions.data.RegionAddResult;
 import com.fcmcpe.nuclear.regions.data.RegionData;
+import com.fcmcpe.nuclear.regions.math.ZonedRegionBox;
 import com.fcmcpe.nuclear.regions.permission.RegionPermission;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Created by Snake1999 on 2016/1/29.
@@ -56,7 +59,6 @@ public class RGCommand extends Command {
             Position pos2 = RGCommands.INSTANCE.getPos2(player);
             TranslationSender.INSTANCE.sendMessage((Player) sender, "rgcommands.msg.pos2",
                     pos2.getLevel().getName(), pos2.getFloorX() + "", pos2.getFloorY() + "", pos2.getFloorZ() + "");
-            player.sendMessage("pos2 " + player.getPosition().toString());
             return true;
         } else if (request.type == RequestType.INFO) {
             RegionData data;
@@ -87,6 +89,41 @@ public class RGCommand extends Command {
                     sender.sendMessage(NuclearDictionary.get(Locale.ENGLISH, "rgcommands.msg.rg-info", params));
                 else TranslationSender.INSTANCE.sendMessage((Player) sender, "rgcommands.msg.rg-info", params);
             }
+        } else if (request.type == RequestType.CREATE) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("This command is only used in-game.");
+                return false;
+            }
+            Position pos1 = RGCommands.INSTANCE.getPos1(player);
+            Position pos2 = RGCommands.INSTANCE.getPos2(player);
+            if (pos1 == null || pos2 == null) {
+                TranslationSender.INSTANCE.sendMessage(player, "rgcommands.error.pos-not-set");
+                return true;
+            }
+            if (!Objects.equals(pos1.getLevel().getName(), pos2.getLevel().getName())) {
+                TranslationSender.INSTANCE.sendMessage(player, "rgcommands.error.not-same-level");
+                return true;
+            }
+            ZonedRegionBox box = ZonedRegionBox.of(pos1, pos2);
+            RegionAddResult result;
+            try {
+                result = NuclearRegions.INSTANCE.getDataProvider().addRegion($LimitedRegionData$.of(box));
+                if (result == null) throw new Exception();
+                NuclearRegions.INSTANCE.getDataProvider().updatePerm(result.getData().getID(), player.getName(), RegionPermission.OWNER);
+            } catch (Exception e) {
+                TranslationSender.INSTANCE.sendMessage(player, "rgcommands.error");
+                e.printStackTrace();
+                return true;
+            }
+            if (result.isConflict()) {
+                TranslationSender.INSTANCE.sendMessage(player, "rgcommands.error.conflict");
+                return true;
+            }
+            RegionData data = result.getData();
+            TranslationSender.INSTANCE.sendMessage(player, "rgcommands.msg.rg-create",
+                    data.getID() + "", data.getBox().getSize() + "");
+            NuclearRegions.INSTANCE.reloadRegionData();
+            return true;
         } else {
             // TODO: 2016/1/29 MESSAGE
             sender.sendMessage("help");

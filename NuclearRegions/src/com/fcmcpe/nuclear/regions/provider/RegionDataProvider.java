@@ -4,6 +4,7 @@ import com.fcmcpe.nuclear.core.provider.DataProvider;
 import com.fcmcpe.nuclear.core.provider.ProviderException;
 import com.fcmcpe.nuclear.regions.data.RegionAddResult;
 import com.fcmcpe.nuclear.regions.data.RegionData;
+import com.fcmcpe.nuclear.regions.data.RegionPermUpdateResult;
 
 import java.util.Collection;
 
@@ -19,6 +20,6 @@ public interface RegionDataProvider extends DataProvider {
 
     void removeRegion(RegionData data) throws ProviderException;
 
-    RegionData updatePerm(RegionData data) throws ProviderException;
+    RegionPermUpdateResult updatePerm(int regionID, String playerName, int perm) throws ProviderException;
 
 }

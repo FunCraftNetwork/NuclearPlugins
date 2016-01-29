@@ -6,7 +6,7 @@ version: "1"
 api: ["1.0.0"]
 
 load: STARTUP
-authors: ["Snake1999"]
+authors: ["Snake1999", "Pub4Game"]
 description: "/rg command for NuclearRegions plugin"
 website: https://github.com/FunCraftNetwork/NuclearPlugins
 

@@ -19,6 +19,13 @@ public class ZonedRegionBox implements RegionBox {
 
     private String levelName;
 
+    public static ZonedRegionBox of(Position pos1, Position pos2) {
+        if (pos1 == null || pos2 == null) return null;
+        if (pos1.getLevel() != pos2.getLevel()) return null;
+        return of(pos1.getFloorX(), pos1.getFloorY(), pos1.getFloorZ(),
+                pos2.getFloorX(), pos2.getFloorY(), pos2.getFloorZ(), pos1.getLevel().getName());
+    }
+
     public static ZonedRegionBox of(int x1, int y1, int z1, int x2, int y2, int z2, String levelName) {
         ZonedRegionBox box = new ZonedRegionBox();
         box.minX = Math.min(x1, x2);

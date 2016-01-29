@@ -10,7 +10,7 @@ import java.util.Map;
  * Created on 2015/12/18 by xtypr.
  * Package com.fcmcpe.nuclear.regions.provider in project NuclearPlugins .
  */
-class BoxedRegionData implements RegionData {
+class $BoxedRegionData$ implements RegionData {
 
     private int id;
     private int x1;
@@ -22,7 +22,7 @@ class BoxedRegionData implements RegionData {
     private String levelName;
     private Map<String, Integer> perm;
 
-    BoxedRegionData(int id, ZonedRegionBox box, Map<String, Integer> perm) {
+    $BoxedRegionData$(int id, ZonedRegionBox box, Map<String, Integer> perm) {
         this.id = id;
         this.x1 = box.getMinX();
         this.y1 = box.getMinY();
